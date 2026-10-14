@@ -3,9 +3,9 @@ site_description: >-
   Taxi-out time prediction at ten European airports:
   team humble-rocket's model, validation protocol and code.
 # Set after the repository is published:
-# site_url: https://<owner>.github.io/<repository>/
-# repo_url: https://github.com/<owner>/<repository>
-# repo_name: <owner>/<repository>
+# site_url: https://juaneslamilla.github.io/PRC-2026-humble-rocket/
+# repo_url: https://github.com/JuanesLamilla/PRC-2026-humble-rocket
+# repo_name: JuanesLamilla/PRC-2026-humble-rocket
 
 docs_dir: docs
 exclude_docs: |
