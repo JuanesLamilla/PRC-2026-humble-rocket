@@ -1,0 +1,50 @@
+name: exp0234_r7c_tabm_slog_nomask
+description: >-
+  Class: ordinary. Twin: exp0219_r7c_tabm_slog. Gate: paired against the twin (same seeds, month_loo), all|ex_ro interval below
+  zero with January and July not worse, forward veto; then the blend gate vs blend_v7h. The K3 finding
+  (exp0227, masks off on RealMLP: -0.98 ex_ro, no-flight-plan lane -19.6) carried to this member; the corruption
+  head reads the same matrix, so it also sees the unmasked columns.
+features: [calendar_v2, cats, fpl_deltas, throughput, runway_gaps_v2, sched_demand, regime, stand_bounds_v2, arrival_taxi_in, metar_visibility, arrival_occupancy_v2, discharge_v2, winter_ops, daylight_curfew, adsb_ground, adsb_ground_v2, fpl_updates, source_mismatch, identity_freq, feed_health, surface_queue]
+mask_for_no_nm: []
+target_encoding: [te_airport_runway, te_airport_stand, te_airport_stand_runway, te_airport_operator, te_airport_actype]
+te_clean_labels: true
+te_alpha: 20
+te_stats: [mean, p10, p50, n]
+cv: {scheme: month_jan_jul}
+model:
+  kind: tabm
+  device: cuda
+  num_boost_round: 1000000
+  early_stopping_rounds: 4
+  params:
+    k: 32
+    n_blocks: 3
+    d_block: 512
+    dropout: 0.1
+    learning_rate: 0.002
+    weight_decay: 0.0003
+    batch_size: 4096
+    max_epochs: 30
+    d_num_emb: 16
+    n_frequencies: 48
+    frequency_scale: 0.1
+    d_cat_emb: 16
+    amp: true
+    slog_patterns: ['*_minus_*', '*_s', 'gap_prev_tko', 'gap_next_tko', 'rwy_gap_mean*']
+    slog_qt: false
+target: {transform: sqrt, clip_min: 0}
+mixture:
+  corruption:
+    types: [sched_default, rollover, stamp_early]
+    train_normal_on: all
+    max_depth: 6
+    num_boost_round: 500
+    early_stopping_rounds: 50
+    stamp_early_offset_s: 1495
+    normal_weight: one_minus_p
+    weight_inner_splits: 2
+    weight_floor: 0.0
+seeds: [1, 2, 3]
+tags: [tabm, gpu, head, soft-weights, r7c, nn, slog, nomask]
+
+test_fit: full

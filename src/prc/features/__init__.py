@@ -1,0 +1,40 @@
+"""Feature blocks. Import the modules so their ``@feature`` registrations run."""
+
+from prc.features import (  # noqa: F401
+    adsb_ground,
+    adsb_ground_v2,
+    aircraft_chars,
+    arrival_feed,
+    arrivals,
+    base,
+    congestion,
+    context_sets,
+    daylight_curfew,
+    domain_interactions,
+    eurocontrol_daily,
+    holidays,
+    hour_state,
+    metar_visibility,
+    overnight_extra,
+    raw_extra,
+    regime,
+    runway_config,
+    runway_geometry,
+    stamp_anomaly,
+    stamp_process,
+    stand_bounds,
+    stand_xplane,
+    surface_flow,
+    surface_queue,
+    taxi_distance,
+    taxi_physics,
+    turnaround,
+    wake_pair,
+    weather,
+    weather_openmeteo,
+    weather_process,
+    winter_ops,
+)
+from prc.features.registry import REGISTRY, build, feature, list_features
+
+__all__ = ["REGISTRY", "build", "feature", "list_features"]

@@ -1,0 +1,48 @@
+# --- data and run outputs: never committed ---
+# Everything under data/ -- raw challenge data, external downloads,
+# intermediate artifacts and internal working notes -- stays local.
+# Only data/README.md (where to get each source) is tracked.
+data/*
+!data/README.md
+!src/prc/data/
+outputs/
+work/
+results/
+logs/
+submissions/
+*.parquet
+*.feather
+*.pkl
+*.joblib
+*.cbm
+*.txt.model
+*.db
+*.log
+jobs/logs/
+
+# --- documentation build (docs/assets/manuscript.pdf is copied in by the mkdocs hook) ---
+site/
+docs/assets/manuscript.pdf
+
+# --- run bookkeeping written locally by the runner ---
+experiments/registry.csv
+experiments/.registry.lock
+
+# --- environment and tooling ---
+.venv*/
+.uv-cache/
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+.env
+.envrc
+.mc/
+.adsb_tmp/
+catboost_info/
+.DS_Store
+.vscode/
+.idea/

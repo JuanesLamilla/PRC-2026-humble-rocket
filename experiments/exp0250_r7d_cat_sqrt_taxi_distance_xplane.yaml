@@ -1,0 +1,37 @@
+name: exp0250_r7d_cat_sqrt_taxi_distance_xplane
+description: >-
+  Class: ordinary. Twin: exp0213_r7d_cat_sqrt_taxi_distance. exp0213 plus the X-Plane Scenery
+  Gateway stand block stand_xplane (size class, stand type, operation type, airline count,
+  stand -> threshold straight distance, parked heading vs threshold, OSM distance gap-filled by
+  X-Plane); nothing else changed.
+features: [calendar_v2, cats, fpl_deltas, throughput, runway_gaps_v2, sched_demand, regime, stand_bounds_v2, arrival_taxi_in, metar_visibility, arrival_occupancy_v2, discharge_v2, winter_ops, daylight_curfew, adsb_ground, adsb_ground_v2, fpl_updates, source_mismatch, identity_freq, feed_health, surface_queue, taxi_distance, stand_xplane]
+mask_for_no_nm: [stand_bounds_v2, arrival_taxi_in, metar_visibility, arrival_occupancy_v2, winter_ops, feed_health, identity_freq]
+drop_columns: [td_apron, td_stand_matched, td_runway_matched]
+target_encoding: []
+cv: {scheme: month_jan_jul}
+model:
+  kind: cat
+  device: cuda
+  num_boost_round: 20000
+  early_stopping_rounds: 200
+  params:
+    learning_rate: 0.02
+    depth: 10
+    grow_policy: Depthwise
+    min_data_in_leaf: 100
+target: {transform: sqrt, clip_min: 0}
+mixture:
+  corruption:
+    types: [sched_default, rollover, stamp_early]
+    train_normal_on: all
+    max_depth: 6
+    num_boost_round: 500
+    early_stopping_rounds: 50
+    stamp_early_offset_s: 1495
+    normal_weight: one_minus_p
+    weight_inner_splits: 2
+    weight_floor: 0.0
+seeds: [1, 2, 3]
+tags: [cat, gpu, head, soft-weights, r7d, taxi-distance, xplane]
+
+test_fit: full

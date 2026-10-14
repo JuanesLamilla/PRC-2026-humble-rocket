@@ -1,0 +1,20 @@
+digraph G {
+  rankdir=TB; nodesep=0.25; ranksep=0.32; newrank=true;
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=10, fillcolor="#F2F4F7", color="#5B6B7F", penwidth=0.8];
+  edge [color="#5B6B7F", arrowsize=0.6, penwidth=0.8];
+  data [label="Movement records (2025) + flight-plan fields\nADS-B ground tracks · METAR · daily flow-management delay · stand/taxiway geometry", fillcolor="#E3ECF7"];
+  fm [label="Feature matrix (one row per departure)\nno feature reads a departure's own off-block stamp or label"];
+  data -> fm;
+  subgraph cluster_m { label="Members (13 folds: 12 month-held + 1 full fit)"; fontname="Helvetica"; fontsize=10; color="#C9D3DE"; style=rounded; labelloc=b;
+    g [label="Two-stage gradient boosting\nstage 1: stamp offset, quantiles,\nP(default), P(long) (nested folds)\nstage 2: mixture value models"];
+    t [label="Distributional transformer\nmasked histogram over taxi time\n+ point mass at C"];
+    s [label="Recording-pattern stack\n(CatBoost, RealMLP, GRU,\nset attention, TabM)"];
+  }
+  fm -> g; fm -> t; fm -> s;
+  cm [label="Class-structured combiner\nP(class) × class value; gate over experts' normal means"];
+  g -> cm; t -> cm; s -> cm;
+  bl [label="Per-lane blend: non-negative least squares on the simplex,\nshrunk toward equal weights, fitted on month-held predictions"];
+  cm -> bl; g -> bl; t -> bl;
+  rules [label="Label-free post-processing\nwindow projection · rollover identity · arrival-twin cap\nfeeder-lateness offset · EOBT-drift offset", fillcolor="#EAF5EA", color="#4F7F4F"];
+  bl -> rules;
+}

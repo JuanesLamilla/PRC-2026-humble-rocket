@@ -1,0 +1,41 @@
+name: exp0235_r7d_cat_stack_gru
+description: >-
+  Class: blend (hybrid). Twin: exp0213_r7d_cat_sqrt_taxi_distance. Gates: paired vs exp0213
+  (fair-trial rule 6), then the blend gate vs blend_v7h (nested NNLS ex-ro, all|ex_ro interval
+  below zero, January and July not worse) and the forward veto. H1 (idea backlog H1): exp0213 plus one column stk_mean, the GRU member
+  exp0223's seed-averaged normal-expert prediction (y_hat_normal, seconds). Fold k's training
+  rows get it from exp0223 inner runs over fold k's 11 training months in 3 interleaved month
+  groups (month k never seen); validation rows from exp0223's month_loo fold k; test rows from
+  exp0223's full fit. Needs the table from scripts/stack_inner.py build.
+features: [calendar_v2, cats, fpl_deltas, throughput, runway_gaps_v2, sched_demand, regime, stand_bounds_v2, arrival_taxi_in, metar_visibility, arrival_occupancy_v2, discharge_v2, winter_ops, daylight_curfew, adsb_ground, adsb_ground_v2, fpl_updates, source_mismatch, identity_freq, feed_health, surface_queue, taxi_distance]
+mask_for_no_nm: [stand_bounds_v2, arrival_taxi_in, metar_visibility, arrival_occupancy_v2, winter_ops, feed_health, identity_freq]
+drop_columns: [td_apron, td_stand_matched, td_runway_matched]
+target_encoding: []
+cv: {scheme: month_jan_jul}
+model:
+  kind: cat
+  device: cuda
+  num_boost_round: 20000
+  early_stopping_rounds: 200
+  params:
+    learning_rate: 0.02
+    depth: 10
+    grow_policy: Depthwise
+    min_data_in_leaf: 100
+target: {transform: sqrt, clip_min: 0}
+mixture:
+  corruption:
+    types: [sched_default, rollover, stamp_early]
+    train_normal_on: all
+    max_depth: 6
+    num_boost_round: 500
+    early_stopping_rounds: 50
+    stamp_early_offset_s: 1495
+    normal_weight: one_minus_p
+    weight_inner_splits: 2
+    weight_floor: 0.0
+seeds: [1, 2, 3]
+tags: [cat, gpu, head, soft-weights, r7d, taxi-distance, stack, hybrid, h1]
+
+test_fit: full
+stack_member: {config: exp0223_r7c_seqenc_slog, inner_groups: 3, columns: [mean]}

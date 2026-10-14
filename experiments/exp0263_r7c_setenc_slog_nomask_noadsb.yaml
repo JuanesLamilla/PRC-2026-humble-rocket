@@ -1,0 +1,222 @@
+name: exp0263_r7c_setenc_slog_nomask_noadsb
+description: >-
+  Class: ordinary. Twin: exp0233_r7c_setenc_slog_nomask. No-ground-track expert: the 21 ADS-B ground-track columns
+  dropped (keeps adsb_matched, adsb2_stand_known, adsb2_stand_thr_dist_m); used only routed to rows (the corruption head's clf_columns lose the same 21 columns)
+  without a ground track (scripts/route_no_ground.py). CatBoost version: exp0259.
+features: [calendar_v2, cats, fpl_deltas, throughput, runway_gaps_v2, sched_demand, regime, stand_bounds_v2, arrival_taxi_in, metar_visibility, arrival_occupancy_v2, discharge_v2, winter_ops, daylight_curfew, adsb_ground, adsb_ground_v2, fpl_updates, source_mismatch, identity_freq, feed_health, surface_queue, context_sets]
+mask_for_no_nm: []
+target_encoding: [te_airport_runway, te_airport_stand, te_airport_stand_runway, te_airport_operator, te_airport_actype]
+te_clean_labels: true
+te_alpha: 20
+te_stats: [mean, p10, p50, n]
+cv: {scheme: month_jan_jul}
+model:
+  kind: setenc
+  device: cuda
+  num_boost_round: 1000000
+  early_stopping_rounds: 4
+  params:
+    d_row: 512
+    d_num_emb: 16
+    n_frequencies: 48
+    frequency_scale: 0.1
+    d_cat_emb: 16
+    ctx_k: 64
+    ctx_mvt_before_min: 45
+    ctx_mvt_after_min: 15
+    ctx_aobt_before_min: 60
+    d_set: 64
+    n_attn: 2
+    n_heads: 4
+    d_ctx_cat: 8
+    k: 16
+    n_head_blocks: 2
+    d_head: 256
+    slog_patterns: ['*_minus_*', '*_s', 'gap_prev_tko', 'gap_next_tko', 'rwy_gap_mean*']
+    slog_qt: false
+    dropout: 0.1
+    learning_rate: 0.002
+    weight_decay: 0.0003
+    batch_size: 4096
+    max_epochs: 30
+    amp: true
+target: {transform: sqrt, clip_min: 0}
+mixture:
+  corruption:
+    types: [sched_default, rollover, stamp_early]
+    train_normal_on: all
+    max_depth: 6
+    num_boost_round: 500
+    early_stopping_rounds: 50
+    stamp_early_offset_s: 1495
+    normal_weight: one_minus_p
+    weight_inner_splits: 2
+    weight_floor: 0.0
+    clf_columns:
+      - hour
+      - minute_of_day
+      - dow
+      - month_num
+      - doy
+      - is_weekend
+      - airport
+      - runway
+      - stand
+      - actype
+      - wake
+      - operator
+      - segment
+      - flight_type
+      - dest
+      - airport_runway
+      - airport_stand
+      - airport_nm
+      - tko_minus_sched
+      - tko_minus_lobt
+      - tko_minus_iobt
+      - tko_minus_eobt1
+      - tko_minus_aobt3
+      - lobt_minus_iobt
+      - nm_unmatched
+      - diverted
+      - n_dep_tko_10m
+      - n_arr_ldg_10m
+      - n_rwy_tko_10m
+      - n_dep_tko_30m
+      - n_arr_ldg_30m
+      - n_rwy_tko_30m
+      - n_dep_tko_60m
+      - n_arr_ldg_60m
+      - n_rwy_tko_60m
+      - gap_prev_tko
+      - gap_next_tko
+      - n_sched_dep_30m
+      - n_sched_dep_60m
+      - regime
+      - on_spike_any
+      - spike_value_s
+      - stand_prev_inblock_gap_s
+      - stand_prev2_inblock_gap_s
+      - stand_next_inblock_gap_s
+      - taxi_upper_bound_s
+      - taxi_lower_bound_s
+      - stand_prev_dep_gap_s
+      - arr_taxiin_mean_30m
+      - arr_taxiin_med_30m
+      - arr_taxiin_p90_30m
+      - arr_taxiin_n_30m
+      - arr_taxiin_mean_60m
+      - arr_taxiin_med_60m
+      - arr_taxiin_p90_60m
+      - arr_taxiin_n_60m
+      - arr_taxiin_mean_120m
+      - arr_taxiin_med_120m
+      - arr_taxiin_p90_120m
+      - arr_taxiin_n_120m
+      - mtr_vis_m
+      - mtr_vis_min_3h
+      - mtr_ceiling_ft
+      - mtr_lvp
+      - mtr_lvp_frac_6h
+      - mtr_rvr
+      - mtr_fog
+      - mtr_freezing
+      - mtr_snow
+      - mtr_obs_age_s
+      - arr_on_surface
+      - n_arr_ldg_pm15m
+      - rwy_gap_mean5
+      - rwy_gap_mean10
+      - prev_wake
+      - wake_pair
+      - tko_rank_in_hour
+      - tko_rank_in_rwy_hour
+      - wo_temp_c
+      - wo_dewpoint_c
+      - wo_dewpoint_spread
+      - wo_temp_le0
+      - wo_temp_le3
+      - wo_frozen_now
+      - wo_frozen_intensity
+      - wo_frozen_1h
+      - wo_frozen_3h
+      - wo_frozen_6h
+      - wo_frozen_hours_12h
+      - wo_hours_since_frozen
+      - wo_freezing_fog
+      - wo_cold_fog
+      - wo_cold_rain
+      - wo_deicing_likely
+      - wo_obs_age_s
+      - dc_solar_elev_deg
+      - dc_is_day
+      - dc_min_since_sunrise
+      - dc_min_to_sunset
+      - dc_daylength_min
+      - dc_local_minute_of_day
+      - dc_local_hour
+      - dc_has_curfew
+      - dc_in_curfew
+      - dc_min_since_curfew_end
+      - dc_min_to_curfew_start
+      - adsb_matched
+      - adsb2_stand_known
+      - adsb2_stand_thr_dist_m
+      - eobt1_minus_iobt
+      - lobt_minus_eobt1
+      - aobt3_minus_lobt
+      - aobt3_minus_eobt1
+      - aobt3_minus_sched
+      - sched_minus_iobt
+      - arvt3_minus_arvt1
+      - nm_planned_block_to_arr_s
+      - actual_tko_to_arr_s
+      - planned_minus_actual_s
+      - flight_rule_mvt
+      - rule_mismatch
+      - actype_mismatch
+      - ades_mismatch
+      - adep_mismatch
+      - n_mismatch
+      - flt_carrier
+      - callsign_prefix
+      - callsign_is_numeric_suffix
+      - freq_flight_share
+      - freq_flight_days
+      - freq_callsign_share
+      - freq_callsign_days
+      - freq_stand_share
+      - freq_stand_days
+      - freq_operator_share
+      - freq_operator_days
+      - freq_dest_share
+      - freq_dest_days
+      - freq_actype_share
+      - freq_actype_days
+      - fh_arr_sched_share_1h
+      - fh_arr_sched_share_6h
+      - fh_nofp_excess_1h
+      - fh_nofp_excess_6h
+      - fh_spike_share_1h
+      - fh_spike_share_6h
+      - fh_nofp_run
+      - sq_taxiing_at_push
+      - sq_taxiing_at_push_rwy
+      - sq_tko_during_taxi
+      - sq_tko_during_taxi_rwy
+      - sq_push_during_taxi
+      - sq_ldg_during_taxi
+      - sq_ldg_during_taxi_rwy
+      - sq_overtaken_by
+      - sq_taxiing_at_tm10
+      - sq_taxiing_at_tm20
+      - sq_taxiing_at_tm30
+      - sq_nbr_proxy_med_prev10
+      - sq_nbr_proxy_p90_prev10
+      - sq_nbr_proxy_med_next10
+      - sq_own_minus_nbr_med
+seeds: [1, 2, 3]
+tags: [setenc, gpu, head, soft-weights, r7c, nn, slog, nomask]
+
+test_fit: full
+drop_columns: [adsb_has_gnd, adsb_mvt_minus_first_move_s, adsb_mvt_minus_first_gnd_s, adsb_gnd_path_m, adsb_stop_total_s, adsb_final_hold_s, adsb_mean_gs_kt, adsb_first_seen_dist_thr_m, adsb_gnd_max_gap_s, adsb2_first_gnd_dist_stand_m, adsb2_first_move_dist_stand_m, adsb2_frac_remaining, adsb2_pre_move_stationary_s, adsb2_n_pre_stationary, adsb2_saw_stationary, adsb2_pushback_dur_s, adsb2_pushback_path_m, adsb2_pushback_disp_m, adsb2_pushback_mean_gs_kt, adsb2_mvt_minus_taxi_start_s, adsb2_mvt_minus_last_still_s]

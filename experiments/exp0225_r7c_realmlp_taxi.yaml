@@ -1,0 +1,47 @@
+name: exp0225_r7c_realmlp_taxi
+description: >-
+  Class: ordinary. Twin: exp0214_r7c_realmlp_sqrt. Gate: paired against exp0214 (same seeds, month_loo), the all|ex_ro
+  interval below zero with January and July not worse, and the forward veto; also added to the current blend.
+  Fair-trial input adaptation (backlog K1): exp0214 plus the
+  taxi_distance block adopted on CatBoost R7d (exp0197, exp0213); no neural member has had it.
+features: [calendar_v2, cats, fpl_deltas, throughput, runway_gaps_v2, sched_demand, regime, stand_bounds_v2, arrival_taxi_in, metar_visibility, arrival_occupancy_v2, discharge_v2, winter_ops, daylight_curfew, adsb_ground, adsb_ground_v2, fpl_updates, source_mismatch, identity_freq, feed_health, surface_queue, taxi_distance]
+mask_for_no_nm: [stand_bounds_v2, arrival_taxi_in, metar_visibility, arrival_occupancy_v2, winter_ops, feed_health, identity_freq]
+target_encoding: [te_airport_runway, te_airport_stand, te_airport_stand_runway, te_airport_operator, te_airport_actype]
+te_clean_labels: true
+te_alpha: 20
+te_stats: [mean, p10, p50, n]
+cv: {scheme: month_jan_jul}
+model:
+  kind: realmlp
+  device: cuda
+  num_boost_round: 1000000
+  early_stopping_rounds: 32
+  params:
+    n_hidden_layers: 3
+    d_hidden: 256
+    act: mish
+    p_drop: 0.15
+    learning_rate: 0.2
+    lr_sched: coslog4
+    weight_decay: 0.02
+    batch_size: 2048
+    max_epochs: 32
+    plr_sigma: 0.1
+    embedding_size: 8
+    amp: true
+target: {transform: sqrt, clip_min: 0}
+mixture:
+  corruption:
+    types: [sched_default, rollover, stamp_early]
+    train_normal_on: all
+    max_depth: 6
+    num_boost_round: 500
+    early_stopping_rounds: 50
+    stamp_early_offset_s: 1495
+    normal_weight: one_minus_p
+    weight_inner_splits: 2
+    weight_floor: 0.0
+seeds: [1, 2, 3]
+tags: [realmlp, gpu, head, soft-weights, r7c, nn, taxi-distance]
+
+test_fit: full

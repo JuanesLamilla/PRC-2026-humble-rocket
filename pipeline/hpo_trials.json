@@ -1,0 +1,1058 @@
+[
+ {
+  "name": "hpo00",
+  "clf": {
+   "depth": 6,
+   "learning_rate": 0.06,
+   "iterations": 6000,
+   "l2_leaf_reg": 10,
+   "random_seed": 1000
+  },
+  "reg": {
+   "depth": 12,
+   "learning_rate": 0.02,
+   "iterations": 4000,
+   "min_data_in_leaf": 1000,
+   "l2_leaf_reg": 30,
+   "border_count": 254,
+   "random_strength": 2,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 1,
+   "random_seed": 2000
+  }
+ },
+ {
+  "name": "hpo01",
+  "clf": {
+   "depth": 6,
+   "learning_rate": 0.03,
+   "iterations": 6000,
+   "l2_leaf_reg": 1,
+   "random_seed": 1001
+  },
+  "reg": {
+   "depth": 8,
+   "learning_rate": 0.04,
+   "iterations": 4000,
+   "min_data_in_leaf": 300,
+   "l2_leaf_reg": 1,
+   "border_count": 254,
+   "random_strength": 2,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 1,
+   "random_seed": 2001
+  }
+ },
+ {
+  "name": "hpo02",
+  "clf": {
+   "depth": 6,
+   "learning_rate": 0.06,
+   "iterations": 3000,
+   "l2_leaf_reg": 3,
+   "random_seed": 1002
+  },
+  "reg": {
+   "depth": 10,
+   "learning_rate": 0.04,
+   "iterations": 15000,
+   "min_data_in_leaf": 1000,
+   "l2_leaf_reg": 1,
+   "border_count": 254,
+   "random_strength": 0.5,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 1,
+   "random_seed": 2002
+  }
+ },
+ {
+  "name": "hpo03",
+  "clf": {
+   "depth": 8,
+   "learning_rate": 0.06,
+   "iterations": 1500,
+   "l2_leaf_reg": 10,
+   "random_seed": 1003
+  },
+  "reg": {
+   "depth": 12,
+   "learning_rate": 0.08,
+   "iterations": 15000,
+   "min_data_in_leaf": 300,
+   "l2_leaf_reg": 1,
+   "border_count": 254,
+   "random_strength": 1,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 1,
+   "random_seed": 2003
+  }
+ },
+ {
+  "name": "hpo04",
+  "clf": {
+   "depth": 8,
+   "learning_rate": 0.03,
+   "iterations": 3000,
+   "l2_leaf_reg": 10,
+   "random_seed": 1004
+  },
+  "reg": {
+   "depth": 12,
+   "learning_rate": 0.04,
+   "iterations": 4000,
+   "min_data_in_leaf": 300,
+   "l2_leaf_reg": 30,
+   "border_count": 254,
+   "random_strength": 2,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 1,
+   "random_seed": 2004
+  }
+ },
+ {
+  "name": "hpo05",
+  "clf": {
+   "depth": 8,
+   "learning_rate": 0.1,
+   "iterations": 3000,
+   "l2_leaf_reg": 10,
+   "random_seed": 1005
+  },
+  "reg": {
+   "depth": 12,
+   "learning_rate": 0.02,
+   "iterations": 15000,
+   "min_data_in_leaf": 50,
+   "l2_leaf_reg": 3,
+   "border_count": 128,
+   "random_strength": 2,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 0,
+   "random_seed": 2005
+  }
+ },
+ {
+  "name": "hpo06",
+  "clf": {
+   "depth": 10,
+   "learning_rate": 0.1,
+   "iterations": 3000,
+   "l2_leaf_reg": 3,
+   "random_seed": 1006
+  },
+  "reg": {
+   "depth": 8,
+   "learning_rate": 0.04,
+   "iterations": 4000,
+   "min_data_in_leaf": 50,
+   "l2_leaf_reg": 30,
+   "border_count": 254,
+   "random_strength": 2,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 1,
+   "random_seed": 2006
+  }
+ },
+ {
+  "name": "hpo07",
+  "clf": {
+   "depth": 10,
+   "learning_rate": 0.06,
+   "iterations": 6000,
+   "l2_leaf_reg": 3,
+   "random_seed": 1007
+  },
+  "reg": {
+   "depth": 12,
+   "learning_rate": 0.08,
+   "iterations": 15000,
+   "min_data_in_leaf": 1000,
+   "l2_leaf_reg": 30,
+   "border_count": 254,
+   "random_strength": 1,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 0,
+   "random_seed": 2007
+  }
+ },
+ {
+  "name": "hpo08",
+  "clf": {
+   "depth": 8,
+   "learning_rate": 0.06,
+   "iterations": 1500,
+   "l2_leaf_reg": 1,
+   "random_seed": 1008
+  },
+  "reg": {
+   "depth": 8,
+   "learning_rate": 0.08,
+   "iterations": 15000,
+   "min_data_in_leaf": 300,
+   "l2_leaf_reg": 30,
+   "border_count": 254,
+   "random_strength": 0.5,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 1,
+   "random_seed": 2008
+  }
+ },
+ {
+  "name": "hpo09",
+  "clf": {
+   "depth": 10,
+   "learning_rate": 0.06,
+   "iterations": 3000,
+   "l2_leaf_reg": 10,
+   "random_seed": 1009
+  },
+  "reg": {
+   "depth": 10,
+   "learning_rate": 0.04,
+   "iterations": 15000,
+   "min_data_in_leaf": 1000,
+   "l2_leaf_reg": 1,
+   "border_count": 254,
+   "random_strength": 1,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 1,
+   "random_seed": 2009
+  }
+ },
+ {
+  "name": "hpo10",
+  "clf": {
+   "depth": 6,
+   "learning_rate": 0.06,
+   "iterations": 6000,
+   "l2_leaf_reg": 10,
+   "random_seed": 1010
+  },
+  "reg": {
+   "depth": 12,
+   "learning_rate": 0.04,
+   "iterations": 8000,
+   "min_data_in_leaf": 50,
+   "l2_leaf_reg": 30,
+   "border_count": 254,
+   "random_strength": 0.5,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 1,
+   "random_seed": 2010
+  }
+ },
+ {
+  "name": "hpo11",
+  "clf": {
+   "depth": 8,
+   "learning_rate": 0.06,
+   "iterations": 1500,
+   "l2_leaf_reg": 1,
+   "random_seed": 1011
+  },
+  "reg": {
+   "depth": 12,
+   "learning_rate": 0.04,
+   "iterations": 4000,
+   "min_data_in_leaf": 300,
+   "l2_leaf_reg": 1,
+   "border_count": 128,
+   "random_strength": 0.5,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 1,
+   "random_seed": 2011
+  }
+ },
+ {
+  "name": "hpo12",
+  "clf": {
+   "depth": 10,
+   "learning_rate": 0.1,
+   "iterations": 1500,
+   "l2_leaf_reg": 10,
+   "random_seed": 1012
+  },
+  "reg": {
+   "depth": 8,
+   "learning_rate": 0.02,
+   "iterations": 4000,
+   "min_data_in_leaf": 1000,
+   "l2_leaf_reg": 1,
+   "border_count": 254,
+   "random_strength": 2,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 1,
+   "random_seed": 2012
+  }
+ },
+ {
+  "name": "hpo13",
+  "clf": {
+   "depth": 6,
+   "learning_rate": 0.03,
+   "iterations": 3000,
+   "l2_leaf_reg": 10,
+   "random_seed": 1013
+  },
+  "reg": {
+   "depth": 12,
+   "learning_rate": 0.08,
+   "iterations": 8000,
+   "min_data_in_leaf": 1000,
+   "l2_leaf_reg": 3,
+   "border_count": 128,
+   "random_strength": 1,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 0,
+   "random_seed": 2013
+  }
+ },
+ {
+  "name": "hpo14",
+  "clf": {
+   "depth": 10,
+   "learning_rate": 0.1,
+   "iterations": 6000,
+   "l2_leaf_reg": 3,
+   "random_seed": 1014
+  },
+  "reg": {
+   "depth": 8,
+   "learning_rate": 0.04,
+   "iterations": 15000,
+   "min_data_in_leaf": 50,
+   "l2_leaf_reg": 3,
+   "border_count": 254,
+   "random_strength": 2,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 1,
+   "random_seed": 2014
+  }
+ },
+ {
+  "name": "hpo15",
+  "clf": {
+   "depth": 8,
+   "learning_rate": 0.03,
+   "iterations": 6000,
+   "l2_leaf_reg": 1,
+   "random_seed": 1015
+  },
+  "reg": {
+   "depth": 10,
+   "learning_rate": 0.02,
+   "iterations": 4000,
+   "min_data_in_leaf": 300,
+   "l2_leaf_reg": 1,
+   "border_count": 128,
+   "random_strength": 1,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 1,
+   "random_seed": 2015
+  }
+ },
+ {
+  "name": "hpo16",
+  "clf": {
+   "depth": 6,
+   "learning_rate": 0.03,
+   "iterations": 6000,
+   "l2_leaf_reg": 3,
+   "random_seed": 1016
+  },
+  "reg": {
+   "depth": 10,
+   "learning_rate": 0.08,
+   "iterations": 8000,
+   "min_data_in_leaf": 300,
+   "l2_leaf_reg": 10,
+   "border_count": 128,
+   "random_strength": 1,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 1,
+   "random_seed": 2016
+  }
+ },
+ {
+  "name": "hpo17",
+  "clf": {
+   "depth": 10,
+   "learning_rate": 0.1,
+   "iterations": 1500,
+   "l2_leaf_reg": 1,
+   "random_seed": 1017
+  },
+  "reg": {
+   "depth": 12,
+   "learning_rate": 0.08,
+   "iterations": 4000,
+   "min_data_in_leaf": 300,
+   "l2_leaf_reg": 10,
+   "border_count": 254,
+   "random_strength": 2,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 0,
+   "random_seed": 2017
+  }
+ },
+ {
+  "name": "hpo18",
+  "clf": {
+   "depth": 10,
+   "learning_rate": 0.1,
+   "iterations": 1500,
+   "l2_leaf_reg": 10,
+   "random_seed": 1018
+  },
+  "reg": {
+   "depth": 10,
+   "learning_rate": 0.02,
+   "iterations": 4000,
+   "min_data_in_leaf": 1000,
+   "l2_leaf_reg": 3,
+   "border_count": 128,
+   "random_strength": 2,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 0,
+   "random_seed": 2018
+  }
+ },
+ {
+  "name": "hpo19",
+  "clf": {
+   "depth": 8,
+   "learning_rate": 0.1,
+   "iterations": 1500,
+   "l2_leaf_reg": 3,
+   "random_seed": 1019
+  },
+  "reg": {
+   "depth": 12,
+   "learning_rate": 0.08,
+   "iterations": 4000,
+   "min_data_in_leaf": 50,
+   "l2_leaf_reg": 3,
+   "border_count": 128,
+   "random_strength": 0.5,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 0,
+   "random_seed": 2019
+  }
+ },
+ {
+  "name": "hpo20",
+  "clf": {
+   "depth": 8,
+   "learning_rate": 0.06,
+   "iterations": 3000,
+   "l2_leaf_reg": 10,
+   "random_seed": 1020
+  },
+  "reg": {
+   "depth": 10,
+   "learning_rate": 0.02,
+   "iterations": 8000,
+   "min_data_in_leaf": 300,
+   "l2_leaf_reg": 3,
+   "border_count": 254,
+   "random_strength": 0.5,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 1,
+   "random_seed": 2020
+  }
+ },
+ {
+  "name": "hpo21",
+  "clf": {
+   "depth": 8,
+   "learning_rate": 0.06,
+   "iterations": 3000,
+   "l2_leaf_reg": 3,
+   "random_seed": 1021
+  },
+  "reg": {
+   "depth": 10,
+   "learning_rate": 0.02,
+   "iterations": 8000,
+   "min_data_in_leaf": 1000,
+   "l2_leaf_reg": 30,
+   "border_count": 254,
+   "random_strength": 0.5,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 1,
+   "random_seed": 2021
+  }
+ },
+ {
+  "name": "hpo22",
+  "clf": {
+   "depth": 6,
+   "learning_rate": 0.03,
+   "iterations": 1500,
+   "l2_leaf_reg": 1,
+   "random_seed": 1022
+  },
+  "reg": {
+   "depth": 8,
+   "learning_rate": 0.04,
+   "iterations": 15000,
+   "min_data_in_leaf": 300,
+   "l2_leaf_reg": 30,
+   "border_count": 128,
+   "random_strength": 0.5,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 1,
+   "random_seed": 2022
+  }
+ },
+ {
+  "name": "hpo23",
+  "clf": {
+   "depth": 6,
+   "learning_rate": 0.06,
+   "iterations": 6000,
+   "l2_leaf_reg": 10,
+   "random_seed": 1023
+  },
+  "reg": {
+   "depth": 12,
+   "learning_rate": 0.08,
+   "iterations": 4000,
+   "min_data_in_leaf": 50,
+   "l2_leaf_reg": 10,
+   "border_count": 128,
+   "random_strength": 2,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 1,
+   "random_seed": 2023
+  }
+ },
+ {
+  "name": "hpo24",
+  "clf": {
+   "depth": 10,
+   "learning_rate": 0.06,
+   "iterations": 6000,
+   "l2_leaf_reg": 10,
+   "random_seed": 1024
+  },
+  "reg": {
+   "depth": 8,
+   "learning_rate": 0.02,
+   "iterations": 8000,
+   "min_data_in_leaf": 50,
+   "l2_leaf_reg": 30,
+   "border_count": 128,
+   "random_strength": 0.5,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 0,
+   "random_seed": 2024
+  }
+ },
+ {
+  "name": "hpo25",
+  "clf": {
+   "depth": 8,
+   "learning_rate": 0.1,
+   "iterations": 1500,
+   "l2_leaf_reg": 10,
+   "random_seed": 1025
+  },
+  "reg": {
+   "depth": 12,
+   "learning_rate": 0.02,
+   "iterations": 15000,
+   "min_data_in_leaf": 300,
+   "l2_leaf_reg": 10,
+   "border_count": 128,
+   "random_strength": 1,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 1,
+   "random_seed": 2025
+  }
+ },
+ {
+  "name": "hpo26",
+  "clf": {
+   "depth": 6,
+   "learning_rate": 0.06,
+   "iterations": 3000,
+   "l2_leaf_reg": 1,
+   "random_seed": 1026
+  },
+  "reg": {
+   "depth": 8,
+   "learning_rate": 0.04,
+   "iterations": 8000,
+   "min_data_in_leaf": 300,
+   "l2_leaf_reg": 1,
+   "border_count": 128,
+   "random_strength": 0.5,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 0,
+   "random_seed": 2026
+  }
+ },
+ {
+  "name": "hpo27",
+  "clf": {
+   "depth": 6,
+   "learning_rate": 0.06,
+   "iterations": 1500,
+   "l2_leaf_reg": 1,
+   "random_seed": 1027
+  },
+  "reg": {
+   "depth": 12,
+   "learning_rate": 0.08,
+   "iterations": 15000,
+   "min_data_in_leaf": 300,
+   "l2_leaf_reg": 10,
+   "border_count": 254,
+   "random_strength": 2,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 0,
+   "random_seed": 2027
+  }
+ },
+ {
+  "name": "hpo28",
+  "clf": {
+   "depth": 8,
+   "learning_rate": 0.06,
+   "iterations": 6000,
+   "l2_leaf_reg": 1,
+   "random_seed": 1028
+  },
+  "reg": {
+   "depth": 12,
+   "learning_rate": 0.04,
+   "iterations": 8000,
+   "min_data_in_leaf": 1000,
+   "l2_leaf_reg": 1,
+   "border_count": 254,
+   "random_strength": 2,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 1,
+   "random_seed": 2028
+  }
+ },
+ {
+  "name": "hpo29",
+  "clf": {
+   "depth": 8,
+   "learning_rate": 0.06,
+   "iterations": 3000,
+   "l2_leaf_reg": 1,
+   "random_seed": 1029
+  },
+  "reg": {
+   "depth": 12,
+   "learning_rate": 0.08,
+   "iterations": 8000,
+   "min_data_in_leaf": 50,
+   "l2_leaf_reg": 10,
+   "border_count": 254,
+   "random_strength": 1,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 0,
+   "random_seed": 2029
+  }
+ },
+ {
+  "name": "hpo30",
+  "clf": {
+   "depth": 8,
+   "learning_rate": 0.06,
+   "iterations": 3000,
+   "l2_leaf_reg": 10,
+   "random_seed": 1030
+  },
+  "reg": {
+   "depth": 8,
+   "learning_rate": 0.08,
+   "iterations": 8000,
+   "min_data_in_leaf": 50,
+   "l2_leaf_reg": 1,
+   "border_count": 128,
+   "random_strength": 0.5,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 0,
+   "random_seed": 2030
+  }
+ },
+ {
+  "name": "hpo31",
+  "clf": {
+   "depth": 6,
+   "learning_rate": 0.03,
+   "iterations": 1500,
+   "l2_leaf_reg": 10,
+   "random_seed": 1031
+  },
+  "reg": {
+   "depth": 10,
+   "learning_rate": 0.08,
+   "iterations": 15000,
+   "min_data_in_leaf": 1000,
+   "l2_leaf_reg": 10,
+   "border_count": 128,
+   "random_strength": 1,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 0,
+   "random_seed": 2031
+  }
+ },
+ {
+  "name": "hpo32",
+  "clf": {
+   "depth": 8,
+   "learning_rate": 0.06,
+   "iterations": 3000,
+   "l2_leaf_reg": 3,
+   "random_seed": 1032
+  },
+  "reg": {
+   "depth": 8,
+   "learning_rate": 0.04,
+   "iterations": 15000,
+   "min_data_in_leaf": 50,
+   "l2_leaf_reg": 3,
+   "border_count": 128,
+   "random_strength": 2,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 0,
+   "random_seed": 2032
+  }
+ },
+ {
+  "name": "hpo33",
+  "clf": {
+   "depth": 10,
+   "learning_rate": 0.1,
+   "iterations": 6000,
+   "l2_leaf_reg": 10,
+   "random_seed": 1033
+  },
+  "reg": {
+   "depth": 12,
+   "learning_rate": 0.04,
+   "iterations": 8000,
+   "min_data_in_leaf": 50,
+   "l2_leaf_reg": 3,
+   "border_count": 128,
+   "random_strength": 0.5,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 1,
+   "random_seed": 2033
+  }
+ },
+ {
+  "name": "hpo34",
+  "clf": {
+   "depth": 10,
+   "learning_rate": 0.06,
+   "iterations": 3000,
+   "l2_leaf_reg": 3,
+   "random_seed": 1034
+  },
+  "reg": {
+   "depth": 10,
+   "learning_rate": 0.02,
+   "iterations": 15000,
+   "min_data_in_leaf": 1000,
+   "l2_leaf_reg": 1,
+   "border_count": 128,
+   "random_strength": 2,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 0,
+   "random_seed": 2034
+  }
+ },
+ {
+  "name": "hpo35",
+  "clf": {
+   "depth": 10,
+   "learning_rate": 0.1,
+   "iterations": 3000,
+   "l2_leaf_reg": 3,
+   "random_seed": 1035
+  },
+  "reg": {
+   "depth": 12,
+   "learning_rate": 0.08,
+   "iterations": 15000,
+   "min_data_in_leaf": 300,
+   "l2_leaf_reg": 1,
+   "border_count": 128,
+   "random_strength": 2,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 0,
+   "random_seed": 2035
+  }
+ },
+ {
+  "name": "hpo36",
+  "clf": {
+   "depth": 8,
+   "learning_rate": 0.03,
+   "iterations": 1500,
+   "l2_leaf_reg": 10,
+   "random_seed": 1036
+  },
+  "reg": {
+   "depth": 12,
+   "learning_rate": 0.02,
+   "iterations": 15000,
+   "min_data_in_leaf": 300,
+   "l2_leaf_reg": 10,
+   "border_count": 128,
+   "random_strength": 2,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 1,
+   "random_seed": 2036
+  }
+ },
+ {
+  "name": "hpo37",
+  "clf": {
+   "depth": 8,
+   "learning_rate": 0.03,
+   "iterations": 3000,
+   "l2_leaf_reg": 3,
+   "random_seed": 1037
+  },
+  "reg": {
+   "depth": 10,
+   "learning_rate": 0.08,
+   "iterations": 8000,
+   "min_data_in_leaf": 1000,
+   "l2_leaf_reg": 30,
+   "border_count": 254,
+   "random_strength": 0.5,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 0,
+   "random_seed": 2037
+  }
+ },
+ {
+  "name": "hpo38",
+  "clf": {
+   "depth": 10,
+   "learning_rate": 0.06,
+   "iterations": 1500,
+   "l2_leaf_reg": 3,
+   "random_seed": 1038
+  },
+  "reg": {
+   "depth": 8,
+   "learning_rate": 0.04,
+   "iterations": 15000,
+   "min_data_in_leaf": 1000,
+   "l2_leaf_reg": 30,
+   "border_count": 128,
+   "random_strength": 2,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 0,
+   "random_seed": 2038
+  }
+ },
+ {
+  "name": "hpo39",
+  "clf": {
+   "depth": 6,
+   "learning_rate": 0.06,
+   "iterations": 3000,
+   "l2_leaf_reg": 10,
+   "random_seed": 1039
+  },
+  "reg": {
+   "depth": 12,
+   "learning_rate": 0.04,
+   "iterations": 4000,
+   "min_data_in_leaf": 1000,
+   "l2_leaf_reg": 1,
+   "border_count": 128,
+   "random_strength": 2,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 0,
+   "random_seed": 2039
+  }
+ },
+ {
+  "name": "hpo40",
+  "clf": {
+   "depth": 10,
+   "learning_rate": 0.1,
+   "iterations": 3000,
+   "l2_leaf_reg": 10,
+   "random_seed": 1040
+  },
+  "reg": {
+   "depth": 8,
+   "learning_rate": 0.04,
+   "iterations": 8000,
+   "min_data_in_leaf": 1000,
+   "l2_leaf_reg": 3,
+   "border_count": 128,
+   "random_strength": 0.5,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 0,
+   "random_seed": 2040
+  }
+ },
+ {
+  "name": "hpo41",
+  "clf": {
+   "depth": 10,
+   "learning_rate": 0.06,
+   "iterations": 3000,
+   "l2_leaf_reg": 10,
+   "random_seed": 1041
+  },
+  "reg": {
+   "depth": 10,
+   "learning_rate": 0.04,
+   "iterations": 4000,
+   "min_data_in_leaf": 1000,
+   "l2_leaf_reg": 3,
+   "border_count": 128,
+   "random_strength": 1,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 1,
+   "random_seed": 2041
+  }
+ },
+ {
+  "name": "hpo42",
+  "clf": {
+   "depth": 10,
+   "learning_rate": 0.06,
+   "iterations": 3000,
+   "l2_leaf_reg": 1,
+   "random_seed": 1042
+  },
+  "reg": {
+   "depth": 10,
+   "learning_rate": 0.02,
+   "iterations": 15000,
+   "min_data_in_leaf": 1000,
+   "l2_leaf_reg": 1,
+   "border_count": 254,
+   "random_strength": 1,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 1,
+   "random_seed": 2042
+  }
+ },
+ {
+  "name": "hpo43",
+  "clf": {
+   "depth": 10,
+   "learning_rate": 0.03,
+   "iterations": 6000,
+   "l2_leaf_reg": 10,
+   "random_seed": 1043
+  },
+  "reg": {
+   "depth": 8,
+   "learning_rate": 0.02,
+   "iterations": 8000,
+   "min_data_in_leaf": 1000,
+   "l2_leaf_reg": 3,
+   "border_count": 128,
+   "random_strength": 0.5,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 0,
+   "random_seed": 2043
+  }
+ },
+ {
+  "name": "hpo44",
+  "clf": {
+   "depth": 10,
+   "learning_rate": 0.1,
+   "iterations": 6000,
+   "l2_leaf_reg": 10,
+   "random_seed": 1044
+  },
+  "reg": {
+   "depth": 8,
+   "learning_rate": 0.04,
+   "iterations": 4000,
+   "min_data_in_leaf": 300,
+   "l2_leaf_reg": 10,
+   "border_count": 128,
+   "random_strength": 2,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 0,
+   "random_seed": 2044
+  }
+ },
+ {
+  "name": "hpo45",
+  "clf": {
+   "depth": 10,
+   "learning_rate": 0.1,
+   "iterations": 1500,
+   "l2_leaf_reg": 1,
+   "random_seed": 1045
+  },
+  "reg": {
+   "depth": 8,
+   "learning_rate": 0.04,
+   "iterations": 8000,
+   "min_data_in_leaf": 50,
+   "l2_leaf_reg": 1,
+   "border_count": 254,
+   "random_strength": 1,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 1,
+   "random_seed": 2045
+  }
+ },
+ {
+  "name": "hpo46",
+  "clf": {
+   "depth": 10,
+   "learning_rate": 0.03,
+   "iterations": 3000,
+   "l2_leaf_reg": 3,
+   "random_seed": 1046
+  },
+  "reg": {
+   "depth": 10,
+   "learning_rate": 0.02,
+   "iterations": 15000,
+   "min_data_in_leaf": 1000,
+   "l2_leaf_reg": 3,
+   "border_count": 254,
+   "random_strength": 2,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 1,
+   "random_seed": 2046
+  }
+ },
+ {
+  "name": "hpo47",
+  "clf": {
+   "depth": 10,
+   "learning_rate": 0.06,
+   "iterations": 1500,
+   "l2_leaf_reg": 1,
+   "random_seed": 1047
+  },
+  "reg": {
+   "depth": 8,
+   "learning_rate": 0.04,
+   "iterations": 8000,
+   "min_data_in_leaf": 300,
+   "l2_leaf_reg": 3,
+   "border_count": 128,
+   "random_strength": 1,
+   "bootstrap_type": "Bayesian",
+   "bagging_temperature": 1,
+   "random_seed": 2047
+  }
+ }
+]
