@@ -1,0 +1,1629 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Taxi-out time prediction at ten European airports: team humble-rocket's model, validation protocol and code.">
+      
+      
+      
+      
+        <link rel="prev" href="../reference/package/">
+      
+      
+        <link rel="next" href="../data-sources/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Team stack reproduction - humble-rocket · PRC Data Challenge 2026</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#5-reproduction" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="humble-rocket · PRC Data Challenge 2026" class="md-header__button md-logo" aria-label="humble-rocket · PRC Data Challenge 2026" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            humble-rocket · PRC Data Challenge 2026
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Team stack reproduction
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="humble-rocket · PRC Data Challenge 2026" class="md-nav__button md-logo" aria-label="humble-rocket · PRC Data Challenge 2026" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    humble-rocket · PRC Data Challenge 2026
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../manuscript/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manuscript
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The model
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    The model
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-final-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The final submission
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-problem-and-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Problem and data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-validation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Validation protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-method/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The team stack
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Running the code
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Running the code
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reproduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reproducing the submission
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Member pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/final/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blend and assembly
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/package/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Package, CLI and scripts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Team stack reproduction
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Team stack reproduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#51-the-chain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 The chain
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#52-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Requirements
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#53-environment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Environment
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#54-challenge-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 Challenge data
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#55-external-archives-state-h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 External archives (state H)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#56-feature-cache-state-h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6 Feature cache (state H)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#57-running-one-member-cell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.7 Running one member cell
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#58-h-members" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.8 H members
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#59-routing-flag-state-h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.9 Routing flag (state H)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#510-traces-rebuild-state-t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.10 Traces rebuild (state T)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#511-t-members" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.11 T members
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#512-routing-and-lane-heads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.12 Routing and lane heads
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#513-mixture-v2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.13 Mixture v2
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#514-stacks-and-gate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.14 Stacks and gate
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#515-candidate-file-and-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.15 Candidate file and checks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#516-what-reproduced-means" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.16 What "reproduced" means
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#517-known-limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.17 Known limits
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../data-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data sources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#51-the-chain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 The chain
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#52-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Requirements
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#53-environment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Environment
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#54-challenge-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 Challenge data
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#55-external-archives-state-h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 External archives (state H)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#56-feature-cache-state-h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6 Feature cache (state H)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#57-running-one-member-cell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.7 Running one member cell
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#58-h-members" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.8 H members
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#59-routing-flag-state-h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.9 Routing flag (state H)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#510-traces-rebuild-state-t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.10 Traces rebuild (state T)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#511-t-members" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.11 T members
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#512-routing-and-lane-heads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.12 Routing and lane heads
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#513-mixture-v2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.13 Mixture v2
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#514-stacks-and-gate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.14 Stacks and gate
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#515-candidate-file-and-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.15 Candidate file and checks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#516-what-reproduced-means" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.16 What "reproduced" means
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#517-known-limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.17 Known limits
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="5-reproduction">5. Reproduction<a class="headerlink" href="#5-reproduction" title="Permanent link">&para;</a></h1>
+<p>This document rebuilds the final submission from the raw challenge data. Every command runs
+from the repository root. GPU steps are given twice where it matters: as a SLURM job
+(<code>jobs/slurm/</code>) and as a plain command for a machine with one GPU.</p>
+<h2 id="51-the-chain">5.1 The chain<a class="headerlink" href="#51-the-chain" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>challenge data ─ prepare ─┐
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>external archives ────────┼─ feature cache (ADS-B state H) ─ H members ─┐
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>                          │                                             │
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>                          ├─ routing flag (state H)                     │
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>                          └─ traces rebuild of 2025-01-01..04-20 (state T) ─ T members
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>                                                                        │
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>      routing ── lane heads ── mixture v2 ── two cell stacks ── gate ── candidate file
+</code></pre></div>
+<p>The final prediction is a gate of two stacks on C = MVT − SCHED (label-free, known for every
+row):</p>
+<table>
+<thead>
+<tr>
+<th>rows</th>
+<th>stack</th>
+<th>members (each: lane head, then mixture v2)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C &lt; 1 h</td>
+<td><code>stack_l2_cell_ng4h2G</code></td>
+<td><code>route_ng</code>, <code>exp0235</code>, <code>exp0225</code>, <code>route_ngRh2</code>, <code>route_ngGh</code>, <code>route_ngS</code>, <code>exp0234</code>; mixture averaged over two fold-averaged fits (<code>_mx2faA</code>)</td>
+</tr>
+<tr>
+<td>C ≥ 1 h</td>
+<td><code>stack_l2_cell_mx2_xp</code></td>
+<td><code>exp0250</code>, <code>exp0235</code>, <code>exp0225</code>, <code>exp0227</code>, <code>exp0232</code>, <code>exp0233</code>, <code>exp0234</code>; one mixture fit each (<code>_mx2</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>A routed member <code>route_&lt;tag&gt;</code> takes a no-ADS-B expert's prediction on rows without an ADS-B
+ground track and the base member's prediction elsewhere:</p>
+<table>
+<thead>
+<tr>
+<th>routed member</th>
+<th>base</th>
+<th>no-ADS-B expert</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>route_ng</code></td>
+<td><code>exp0250_r7d_cat_sqrt_taxi_distance_xplane</code> (H)</td>
+<td><code>exp0259_r7d_cat_sqrt_taxi_distance_xplane_noadsb</code> (T)</td>
+</tr>
+<tr>
+<td><code>route_ngRh2</code></td>
+<td><code>exp0268_r7c_realmlp_nomask_adsbtr_hp1</code> (T)</td>
+<td><code>exp0269_r7c_realmlp_nomask_noadsb_hp1</code> (T)</td>
+</tr>
+<tr>
+<td><code>route_ngGh</code></td>
+<td><code>exp0271_r7c_seqenc_slog_nomask_adsbtr_hp1</code> (T)</td>
+<td><code>exp0262_r7c_seqenc_slog_nomask_noadsb</code> (T)</td>
+</tr>
+<tr>
+<td><code>route_ngS</code></td>
+<td><code>exp0233_r7c_setenc_slog_nomask</code> (H)</td>
+<td><code>exp0263_r7c_setenc_slog_nomask_noadsb</code> (T)</td>
+</tr>
+</tbody>
+</table>
+<p><code>exp0235_r7d_cat_stack_gru</code> is a CatBoost member with one extra input: the out-of-fold
+prediction of the GRU member <code>exp0223_r7c_seqenc_slog</code>. It needs 39 inner GRU runs (§5.8).</p>
+<p><strong>Two ADS-B archive states.</strong> The ADSB.lol heatmap files of 2025-01-01 to 2025-04-20 drop
+ground tracks at EGLL, EDDF and EHAM. Those 110 days are rebuilt from the full traces. Members
+marked H were trained on the heatmap archive, members marked T on the rebuilt one. Only those
+110 days differ; every other 2025 day and every 2026 day is identical in both states. An exact
+rebuild therefore trains the H members, writes the routing flag, rebuilds the 110 days, and
+then trains the T members.</p>
+<h2 id="52-requirements">5.2 Requirements<a class="headerlink" href="#52-requirements" title="Permanent link">&para;</a></h2>
+<p>GPU steps ran on NVIDIA L40S cards with 48 GB of memory, one card per array task. The SLURM
+templates request the CPU cores and RAM below; set the time limit for your cluster.</p>
+<table>
+<thead>
+<tr>
+<th>step</th>
+<th>resource</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ADS-B heatmap build (§5.5)</td>
+<td>CPU; internet access, about 550 GB streamed; 9 GB transient disk</td>
+</tr>
+<tr>
+<td>member cells, H and T (§5.8, §5.11)</td>
+<td>1 CUDA GPU with 48 GB per seed; 8 CPU cores, 80 GB RAM</td>
+</tr>
+<tr>
+<td>exp0223 inner runs (§5.8)</td>
+<td>1 CUDA GPU with 48 GB per task, 39 tasks; 16 CPU cores, 160 GB RAM</td>
+</tr>
+<tr>
+<td>stack table (§5.8)</td>
+<td>CPU; 4 cores, 16 GB RAM</td>
+</tr>
+<tr>
+<td>traces rebuild (§5.10)</td>
+<td>11 CPU tasks; internet access; 12 GB RAM and up to 9 GB transient disk per task</td>
+</tr>
+<tr>
+<td>mixture v2 fits (§5.13)</td>
+<td>1 CUDA GPU with 48 GB per fit, 21 fits; 8 CPU cores, 64 GB RAM</td>
+</tr>
+<tr>
+<td>routing, lane heads, applies, stacks, gate, candidate</td>
+<td>CPU; up to 32 GB RAM</td>
+</tr>
+</tbody>
+</table>
+<p>Disk: raw and interim challenge data 0.6 GB, feature cache 1.8 GB, external
+archives 3.1 GB, about 0.1 GB per run directory.</p>
+<h2 id="53-environment">5.3 Environment<a class="headerlink" href="#53-environment" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>git<span class="w"> </span>clone<span class="w"> </span>&lt;repository<span class="w"> </span>URL&gt;<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>prc-data-challenge-2026-humble-rocket
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>uv<span class="w"> </span>sync<span class="w"> </span>--group<span class="w"> </span>nn<span class="w">          </span><span class="c1"># Python 3.12 and the locked packages, PyTorch included</span>
+</code></pre></div>
+<p><a href="https://docs.astral.sh/uv/">uv</a> installs Python 3.12 if it is missing. <code>uv.lock</code> pins every
+package (PyTorch 2.14, XGBoost 3.4.1, CatBoost 1.2.10). The GPU driver must support the CUDA
+version of the locked PyTorch wheels. Every GPU job script checks for a visible GPU before it
+starts.</p>
+<p>On a SLURM cluster, enable the <code>##SBATCH --account</code>, <code>--partition</code> and <code>--time</code> lines of the
+templates in <code>jobs/slurm/</code> for your site and create the log directory once: <code>mkdir -p jobs/logs</code>.</p>
+<h2 id="54-challenge-data">5.4 Challenge data<a class="headerlink" href="#54-challenge-data" title="Permanent link">&para;</a></h2>
+<p>The organizers issue access keys to registered teams. Keys never go into a file in the
+repository.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>mc<span class="w"> </span><span class="nb">alias</span><span class="w"> </span><span class="nb">set</span><span class="w"> </span>prc<span class="w"> </span>https://s3.opensky-network.org<span class="w"> </span>&lt;access-key&gt;<span class="w"> </span>&lt;secret-key&gt;<span class="w">   </span><span class="c1"># MinIO client, once</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>cp<span class="w"> </span>.env.example<span class="w"> </span>.env<span class="w">              </span><span class="c1"># set PRC_TEAM_NAME; PRC_DATA_BUCKET is the organizers' bucket</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>uv<span class="w"> </span>run<span class="w"> </span>prc<span class="w"> </span>data<span class="w"> </span>pull<span class="w">              </span><span class="c1"># mc mirror -&gt; data/raw/</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>uv<span class="w"> </span>run<span class="w"> </span>prc<span class="w"> </span>data<span class="w"> </span>prepare<span class="w">           </span><span class="c1"># -&gt; data/interim/movements.parquet</span>
+</code></pre></div>
+<p><code>jobs/slurm/stage-data.sbatch</code> runs the same steps plus the feature build of §5.6.
+<code>data/raw/manifest.json</code> records the sha256 of every challenge file, so a reissued file is
+visible.</p>
+<h2 id="55-external-archives-state-h">5.5 External archives (state H)<a class="headerlink" href="#55-external-archives-state-h" title="Permanent link">&para;</a></h2>
+<p>Sources, licences and attributions: <a href="../data-sources/"><code>docs/data-sources.md</code></a>. Run these on a CPU node with
+internet access.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/fetch_external.py<span class="w"> </span>ourairports<span class="w">   </span><span class="c1"># first: the ADS-B build reads runway thresholds</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/fetch_external.py<span class="w"> </span>metar<span class="w"> </span>--years<span class="w"> </span><span class="m">2025</span><span class="w"> </span><span class="m">2026</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/fetch_external.py<span class="w"> </span>osm<span class="w">           </span><span class="c1"># -&gt; data/external/osm_&lt;date&gt;/</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/fetch_external.py<span class="w"> </span>xplane<span class="w">        </span><span class="c1"># -&gt; data/external/xplane_gateway_&lt;date&gt;/</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/fetch_external.py<span class="w"> </span>openmeteo<span class="w">     </span><span class="c1"># read by the mixture v2 frame</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/adsb_build.py<span class="w"> </span>run<span class="w"> </span>--stage<span class="w"> </span><span class="m">1</span><span class="w"> </span>--workers<span class="w"> </span><span class="m">3</span><span class="w">   </span><span class="c1"># 2025-01, 2025-07, 2026-01, 2026-07</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/adsb_build.py<span class="w"> </span>run<span class="w"> </span>--stage<span class="w"> </span><span class="m">2</span><span class="w"> </span>--workers<span class="w"> </span><span class="m">3</span><span class="w">   </span><span class="c1"># the other ten 2025 months</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/adsb_build.py<span class="w"> </span>status<span class="w">                      </span><span class="c1"># expect 426 of 427 days (2025-12-31 is absent)</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/adsb_v2.py<span class="w"> </span>archive<span class="w">                        </span><span class="c1"># ground points -&gt; adsblol_ground_v2/ and the stand table</span>
+</code></pre></div>
+<p><code>adsb_build.py</code> reads the heatmap files and falls back to the full traces for a day without
+them. It resumes where it stopped. Keep exactly one <code>data/external/osm_*</code> directory: the
+<code>taxi_distance</code> block reads the lexically last one.</p>
+<h2 id="56-feature-cache-state-h">5.6 Feature cache (state H)<a class="headerlink" href="#56-feature-cache-state-h" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>uv<span class="w"> </span>run<span class="w"> </span>prc<span class="w"> </span>features<span class="w"> </span>build<span class="w"> </span>--all
+</code></pre></div>
+<p>Run it after §5.5. The cache is content-addressed
+(<code>data/features/&lt;block&gt;__&lt;source hash&gt;__&lt;input hash&gt;[__x&lt;external hash&gt;].parquet</code>), so the H
+and T caches of the ADS-B blocks live side by side.</p>
+<h2 id="57-running-one-member-cell">5.7 Running one member cell<a class="headerlink" href="#57-running-one-member-cell" title="Permanent link">&para;</a></h2>
+<p>A member is one experiment YAML in <code>experiments/</code>, run with three seeds. Each seed is one
+cell: every fold of the CV scheme, plus (with <code>test_fit: full</code> in the YAML) one fit on all of
+2025 that writes the test prediction.</p>
+<p>With SLURM, one array task per seed:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>cell<span class="o">()</span><span class="w"> </span><span class="o">{</span><span class="w">  </span><span class="c1"># cell &lt;experiment&gt; &lt;scheme&gt; &lt;run root&gt; [seeds]</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">seeds</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">4</span><span class="k">:-</span><span class="nv">1</span><span class="p">,2,3</span><span class="si">}</span><span class="s2">"</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nv">CONFIG</span><span class="o">=</span><span class="s2">"experiments/</span><span class="nv">$1</span><span class="s2">.yaml"</span><span class="w"> </span><span class="nv">SCHEME</span><span class="o">=</span><span class="s2">"</span><span class="nv">$2</span><span class="s2">"</span><span class="w"> </span><span class="nv">OUT_ROOT</span><span class="o">=</span><span class="s2">"outputs/runs/</span><span class="nv">$3</span><span class="s2">"</span><span class="w"> </span><span class="nv">SEEDS</span><span class="o">=</span><span class="s2">"</span><span class="nv">$seeds</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span>sbatch<span class="w"> </span>--parsable<span class="w"> </span>--array<span class="o">=</span><span class="m">0</span>-2<span class="w"> </span>--export<span class="o">=</span>ALL,CONFIG,SCHEME,OUT_ROOT,SEEDS<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span>jobs/slurm/member-cell.sbatch
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="o">}</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>cell<span class="w"> </span>exp0225_r7c_realmlp_taxi<span class="w"> </span>month_loo<span class="w"> </span>loo-exp0225_r7c_realmlp_taxi
+</code></pre></div>
+<p>Without SLURM, on one GPU, the same cells one after another:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nv">e</span><span class="o">=</span>exp0225_r7c_realmlp_taxi
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">for</span><span class="w"> </span>s<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="m">3</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/run_cell.py<span class="w"> </span>--config<span class="w"> </span><span class="s2">"experiments/</span><span class="nv">$e</span><span class="s2">.yaml"</span><span class="w"> </span>--seed<span class="w"> </span><span class="s2">"</span><span class="nv">$s</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span>--scheme<span class="w"> </span>month_loo<span class="w"> </span>--out<span class="w"> </span><span class="s2">"outputs/runs/loo-</span><span class="nv">$e</span><span class="s2">"</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="k">done</span>
+</code></pre></div>
+<p>Each cell writes <code>outputs/runs/loo-&lt;exp&gt;/&lt;exp&gt;__s&lt;seed&gt;__month_loo/</code>. A cell whose
+<code>metrics.json</code> exists is skipped, so a rerun resumes.</p>
+<p><strong>Check every cell before merging.</strong> A cell can finish with a NaN fold; that fold's rows are
+then missing from its out-of-fold file.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">for</span><span class="w"> </span>s<span class="w"> </span><span class="k">in</span><span class="w"> </span>outputs/runs/loo-*/*/status.json<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">"import json, math, sys; d = json.load(open(sys.argv[1])); \</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="s2">bad = [i for i, x in enumerate(d['fit_rmse']) if x is None or math.isnan(x)]; \</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="s2">print(sys.argv[1], 'NaN folds', bad) if bad else None"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$s</span><span class="s2">"</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="k">done</span>
+</code></pre></div>
+<p>Rerun a member with a NaN fold with the next unused seed (<code>SEEDS=4</code>), drop the failed cell's
+directory from the run root, and merge.</p>
+<p><strong>Merge the seeds</strong> into one run directory per member:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/merge_seeds.py<span class="w"> </span>merge-seeds<span class="w"> </span>outputs/runs/loo-exp0225_r7c_realmlp_taxi
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="c1"># -&gt; outputs/runs/exp0225_r7c_realmlp_taxi__s1-2-3__month_loo/</span>
+</code></pre></div>
+<p>The merge joins the cells on the movement id, refuses cells of different configs or rows, and
+recomputes every metric. The merged name carries the seeds (<code>__s2-3-4__</code> for seeds 2, 3, 4).</p>
+<h2 id="58-h-members">5.8 H members<a class="headerlink" href="#58-h-members" title="Permanent link">&para;</a></h2>
+<p>Train on the heatmap archive (state H), before §5.10.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">for</span><span class="w"> </span>e<span class="w"> </span><span class="k">in</span><span class="w"> </span>exp0250_r7d_cat_sqrt_taxi_distance_xplane<span class="w"> </span>exp0225_r7c_realmlp_taxi<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">         </span>exp0227_r7c_realmlp_nomask<span class="w"> </span>exp0232_r7c_seqenc_slog_nomask<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">         </span>exp0233_r7c_setenc_slog_nomask<span class="w"> </span>exp0234_r7c_tabm_slog_nomask<span class="w"> </span>exp0223_r7c_seqenc_slog<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">  </span>cell<span class="w"> </span><span class="s2">"</span><span class="nv">$e</span><span class="s2">"</span><span class="w"> </span>month_loo<span class="w"> </span><span class="s2">"loo-</span><span class="nv">$e</span><span class="s2">"</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="k">done</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>cell<span class="w"> </span>exp0223_r7c_seqenc_slog<span class="w"> </span>tail_nov_dec<span class="w"> </span>fwd-exp0223_r7c_seqenc_slog
+</code></pre></div>
+<p>Then the stacked member <code>exp0235</code>. Its stack table needs 39 inner runs of <code>exp0223</code> (3 seeds
+× the 13 outer training-month sets of <code>month_loo</code> and <code>tail_nov_dec</code>) and the two <code>exp0223</code>
+run roots above:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nv">MEMBER</span><span class="o">=</span>exp0223_r7c_seqenc_slog<span class="w"> </span><span class="nv">OUT_ROOT</span><span class="o">=</span>outputs/runs/inner-exp0223_r7c_seqenc_slog<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span>sbatch<span class="w"> </span>--array<span class="o">=</span><span class="m">0</span>-38%8<span class="w"> </span>--export<span class="o">=</span>ALL,MEMBER,OUT_ROOT<span class="w"> </span>jobs/slurm/stack-inner.sbatch
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>sbatch<span class="w"> </span>jobs/slurm/stack-build.sbatch<span class="w">           </span><span class="c1"># after the inner runs and both exp0223 roots</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>cell<span class="w"> </span>exp0235_r7d_cat_stack_gru<span class="w"> </span>month_loo<span class="w"> </span>loo-exp0235_r7d_cat_stack_gru
+</code></pre></div>
+<p>Without SLURM: <code>uv run python scripts/stack_inner.py inner --member exp0223_r7c_seqenc_slog
+--out outputs/runs/inner-exp0223_r7c_seqenc_slog</code> runs all 39 inner runs in sequence;
+<code>scripts/stack_inner.py build</code> (arguments in the script's docstring and in
+<code>jobs/slurm/stack-build.sbatch</code>) writes the table to <code>data/stack/exp0223_r7c_seqenc_slog__g3/</code>.</p>
+<p>Check the cells (§5.7), then merge the seven member roots:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">for</span><span class="w"> </span>r<span class="w"> </span><span class="k">in</span><span class="w"> </span>outputs/runs/loo-exp02<span class="o">{</span><span class="m">25</span>,27,32,33,34,35,50<span class="o">}</span>_*<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/merge_seeds.py<span class="w"> </span>merge-seeds<span class="w"> </span><span class="s2">"</span><span class="nv">$r</span><span class="s2">"</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="k">done</span>
+</code></pre></div>
+<h2 id="59-routing-flag-state-h">5.9 Routing flag (state H)<a class="headerlink" href="#59-routing-flag-state-h" title="Permanent link">&para;</a></h2>
+<p>Write the flag before the traces rebuild, while <code>data/external/</code> holds the heatmap archive:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/write_route_flag.py<span class="w"> </span>exp0250_r7d_cat_sqrt_taxi_distance_xplane__s1-2-3__month_loo
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="c1"># -&gt; outputs/route/adsb_has_gnd_heatmap.parquet</span>
+</code></pre></div>
+<p>Our flag: 2,429,888 rows; 1,444,508 with a ground track, 980,665 without, 4,715 null (null
+is routed as "no ground track").</p>
+<h2 id="510-traces-rebuild-state-t">5.10 Traces rebuild (state T)<a class="headerlink" href="#510-traces-rebuild-state-t" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nv">P</span><span class="o">=</span><span class="k">$(</span><span class="nv">MODE</span><span class="o">=</span>prep<span class="w"> </span>sbatch<span class="w"> </span>--parsable<span class="w"> </span>--export<span class="o">=</span>ALL,MODE<span class="w"> </span>jobs/slurm/adsb-traces.sbatch<span class="k">)</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="nv">Q</span><span class="o">=</span><span class="k">$(</span><span class="nv">MODE</span><span class="o">=</span>pull<span class="w"> </span>sbatch<span class="w"> </span>--parsable<span class="w"> </span>--dependency<span class="o">=</span>afterok:<span class="nv">$P</span><span class="w"> </span>--array<span class="o">=</span><span class="m">0</span>-10%8<span class="w"> </span>--export<span class="o">=</span>ALL,MODE<span class="w"> </span>jobs/slurm/adsb-traces.sbatch<span class="k">)</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="nv">MODE</span><span class="o">=</span>v2<span class="w"> </span>sbatch<span class="w"> </span>--dependency<span class="o">=</span>afterok:<span class="nv">$Q</span><span class="w"> </span>--export<span class="o">=</span>ALL,MODE<span class="w"> </span>jobs/slurm/adsb-traces.sbatch
+</code></pre></div>
+<p><code>prep</code> keeps a backup of the 110 heatmap days. <code>pull</code> rebuilds 10 days per task from the full
+traces. <code>v2</code> checks that all 110 days were rebuilt, rebuilds their v2 archive and the
+<code>adsb_ground</code> / <code>adsb_ground_v2</code> feature cache. Without SLURM, run the three modes in order with
+<code>bash</code>, setting <code>SLURM_ARRAY_TASK_ID=0</code> to <code>10</code> for <code>pull</code>.</p>
+<h2 id="511-t-members">5.11 T members<a class="headerlink" href="#511-t-members" title="Permanent link">&para;</a></h2>
+<p>Train after §5.10. Our <code>exp0269</code> seed-1 cell diverged, so that member uses seeds 2, 3 and 4.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">for</span><span class="w"> </span>e<span class="w"> </span><span class="k">in</span><span class="w"> </span>exp0259_r7d_cat_sqrt_taxi_distance_xplane_noadsb<span class="w"> </span>exp0262_r7c_seqenc_slog_nomask_noadsb<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">         </span>exp0263_r7c_setenc_slog_nomask_noadsb<span class="w"> </span>exp0268_r7c_realmlp_nomask_adsbtr_hp1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">         </span>exp0271_r7c_seqenc_slog_nomask_adsbtr_hp1<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">  </span>cell<span class="w"> </span><span class="s2">"</span><span class="nv">$e</span><span class="s2">"</span><span class="w"> </span>month_loo<span class="w"> </span><span class="s2">"loo-</span><span class="nv">$e</span><span class="s2">"</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="k">done</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>cell<span class="w"> </span>exp0269_r7c_realmlp_nomask_noadsb_hp1<span class="w"> </span>month_loo<span class="w"> </span>loo-exp0269_r7c_realmlp_nomask_noadsb_hp1<span class="w"> </span><span class="m">2</span>,3,4
+</code></pre></div>
+<p>Check the cells (§5.7), then merge:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="k">for</span><span class="w"> </span>r<span class="w"> </span><span class="k">in</span><span class="w"> </span>outputs/runs/loo-exp02<span class="o">{</span><span class="m">59</span>,62,63,68,69,71<span class="o">}</span>_*<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">  </span>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/merge_seeds.py<span class="w"> </span>merge-seeds<span class="w"> </span><span class="s2">"</span><span class="nv">$r</span><span class="s2">"</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="k">done</span>
+</code></pre></div>
+<h2 id="512-routing-and-lane-heads">5.12 Routing and lane heads<a class="headerlink" href="#512-routing-and-lane-heads" title="Permanent link">&para;</a></h2>
+<p>CPU only.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="nv">F</span><span class="o">=</span>outputs/route/adsb_has_gnd_heatmap.parquet
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="nv">L</span><span class="o">=</span>__s1-2-3__month_loo
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/route_no_ground.py<span class="w"> </span>exp0250_r7d_cat_sqrt_taxi_distance_xplane<span class="nv">$L</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w">  </span>exp0259_r7d_cat_sqrt_taxi_distance_xplane_noadsb<span class="nv">$L</span><span class="w"> </span>route_ng__month_loo<span class="w"> </span>--flag<span class="w"> </span><span class="nv">$F</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/route_no_ground.py<span class="w"> </span>exp0268_r7c_realmlp_nomask_adsbtr_hp1<span class="nv">$L</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="w">  </span>exp0269_r7c_realmlp_nomask_noadsb_hp1__s2-3-4__month_loo<span class="w"> </span>route_ngRh2__month_loo<span class="w"> </span>--flag<span class="w"> </span><span class="nv">$F</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/route_no_ground.py<span class="w"> </span>exp0271_r7c_seqenc_slog_nomask_adsbtr_hp1<span class="nv">$L</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="w">  </span>exp0262_r7c_seqenc_slog_nomask_noadsb<span class="nv">$L</span><span class="w"> </span>route_ngGh__month_loo<span class="w"> </span>--flag<span class="w"> </span><span class="nv">$F</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/route_no_ground.py<span class="w"> </span>exp0233_r7c_setenc_slog_nomask<span class="nv">$L</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="w">  </span>exp0263_r7c_setenc_slog_nomask_noadsb<span class="nv">$L</span><span class="w"> </span>route_ngS__month_loo<span class="w"> </span>--flag<span class="w"> </span><span class="nv">$F</span>
+</code></pre></div>
+<p>The expert's seed columns fill the base's seed slots by position, so the <code>s2-3-4</code> expert routes
+into an <code>s1-2-3</code> base.</p>
+<p>Lane head on departures without a flight-plan record, 11 runs:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>lane<span class="o">()</span><span class="w"> </span><span class="o">{</span><span class="w">  </span><span class="c1"># lane &lt;source run&gt; &lt;name&gt; -&gt; outputs/runs/&lt;name&gt;_lane</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">  </span>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/no_nm_lane_model.py<span class="w"> </span>fit<span class="w"> </span>--run<span class="w"> </span><span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span><span class="w"> </span>--out<span class="w"> </span><span class="s2">"outputs/lane/</span><span class="nv">$2</span><span class="s2">.parquet"</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">  </span>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/no_nm_lane_model.py<span class="w"> </span>apply<span class="w"> </span>--run<span class="w"> </span><span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span><span class="w"> </span>--lane<span class="w"> </span><span class="s2">"outputs/lane/</span><span class="nv">$2</span><span class="s2">.parquet"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="w">    </span>--out<span class="w"> </span><span class="s2">"</span><span class="nv">$2</span><span class="s2">_lane"</span><span class="w"> </span>--auto-airports
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="o">}</span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="k">for</span><span class="w"> </span>e<span class="w"> </span><span class="k">in</span><span class="w"> </span>exp0250_r7d_cat_sqrt_taxi_distance_xplane<span class="w"> </span>exp0235_r7d_cat_stack_gru<span class="w"> </span>exp0225_r7c_realmlp_taxi<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="w">         </span>exp0227_r7c_realmlp_nomask<span class="w"> </span>exp0232_r7c_seqenc_slog_nomask<span class="w"> </span>exp0233_r7c_setenc_slog_nomask<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a><span class="w">         </span>exp0234_r7c_tabm_slog_nomask<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="w">  </span>lane<span class="w"> </span><span class="s2">"</span><span class="nv">$e$L</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$e</span><span class="s2">"</span>
+<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="k">done</span>
+<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a><span class="k">for</span><span class="w"> </span>t<span class="w"> </span><span class="k">in</span><span class="w"> </span>ng<span class="w"> </span>ngRh2<span class="w"> </span>ngGh<span class="w"> </span>ngS<span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span>lane<span class="w"> </span><span class="s2">"route_</span><span class="si">${</span><span class="nv">t</span><span class="si">}</span><span class="s2">__month_loo"</span><span class="w"> </span><span class="s2">"route_</span><span class="nv">$t</span><span class="s2">"</span><span class="p">;</span><span class="w"> </span><span class="k">done</span>
+</code></pre></div>
+<p><code>--auto-airports</code> chooses the airports where the lane head replaces the member, fold-safe.</p>
+<h2 id="513-mixture-v2">5.13 Mixture v2<a class="headerlink" href="#513-mixture-v2" title="Permanent link">&para;</a></h2>
+<p>The member-independent frame once, then one GPU fit per lane run. The fit settings are fixed in
+<code>jobs/slurm/mixture-v2.sbatch</code> (<code>--device cuda --batch 4096 --lr 2e-3 --epochs 40 --patience 5
+--n-seeds 8</code>).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="nv">V15</span><span class="o">=</span>exp0250_r7d_cat_sqrt_taxi_distance_xplane_lane,exp0235_r7d_cat_stack_gru_lane,exp0225_r7c_realmlp_taxi_lane,exp0227_r7c_realmlp_nomask_lane,exp0232_r7c_seqenc_slog_nomask_lane,exp0233_r7c_setenc_slog_nomask_lane,exp0234_r7c_tabm_slog_nomask_lane
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="nv">FIN</span><span class="o">=</span>route_ng_lane,exp0235_r7d_cat_stack_gru_lane,exp0225_r7c_realmlp_taxi_lane,route_ngRh2_lane,route_ngGh_lane,route_ngS_lane,exp0234_r7c_tabm_slog_nomask_lane
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="nv">J</span><span class="o">=</span><span class="k">$(</span><span class="nv">MODE</span><span class="o">=</span>build<span class="w"> </span>sbatch<span class="w"> </span>--parsable<span class="w"> </span>--export<span class="o">=</span>ALL,MODE<span class="w"> </span>jobs/slurm/mixture-v2.sbatch<span class="k">)</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="c1"># C &gt;= 1 h stack: one full fit per member, seed 0  -&gt; outputs/mixture_v2/&lt;run&gt;__v2.parquet</span>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="nv">RUNS</span><span class="o">=</span><span class="nv">$V15</span><span class="w"> </span>sbatch<span class="w"> </span>--dependency<span class="o">=</span>afterok:<span class="nv">$J</span><span class="w"> </span>--array<span class="o">=</span><span class="m">0</span>-6<span class="w"> </span>--export<span class="o">=</span>ALL,RUNS<span class="w"> </span>jobs/slurm/mixture-v2.sbatch
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="c1"># C &lt; 1 h stack: two fold-averaged fits per member -&gt; &lt;run&gt;__v2__fa0, &lt;run&gt;__v2__fa1</span>
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a><span class="nv">RUNS</span><span class="o">=</span><span class="nv">$FIN</span><span class="w"> </span><span class="nv">TAG</span><span class="o">=</span>fa0<span class="w"> </span><span class="nv">MX_ARGS</span><span class="o">=</span>--test-foldavg<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a><span class="w">  </span>sbatch<span class="w"> </span>--dependency<span class="o">=</span>afterok:<span class="nv">$J</span><span class="w"> </span>--array<span class="o">=</span><span class="m">0</span>-6<span class="w"> </span>--export<span class="o">=</span>ALL,RUNS,TAG,MX_ARGS<span class="w"> </span>jobs/slurm/mixture-v2.sbatch
+<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a><span class="nv">RUNS</span><span class="o">=</span><span class="nv">$FIN</span><span class="w"> </span><span class="nv">TAG</span><span class="o">=</span>fa1<span class="w"> </span><span class="nv">MX_ARGS</span><span class="o">=</span><span class="s2">"--test-foldavg --seed 1"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a><span class="w">  </span>sbatch<span class="w"> </span>--dependency<span class="o">=</span>afterok:<span class="nv">$J</span><span class="w"> </span>--array<span class="o">=</span><span class="m">0</span>-6<span class="w"> </span>--export<span class="o">=</span>ALL,RUNS,TAG,MX_ARGS<span class="w"> </span>jobs/slurm/mixture-v2.sbatch
+</code></pre></div>
+<p>Without SLURM: <code>uv run python scripts/mixture_v2.py build --audit</code>, then for each run
+<code>uv run python scripts/mixture_v2.py fit --run &lt;run&gt; --device cuda --batch 4096 --lr 2e-3
+--epochs 40 --patience 5 --n-seeds 8</code> with <code>--tag fa0 --test-foldavg</code> or
+<code>--tag fa1 --test-foldavg --seed 1</code> for the C &lt; 1 h members.</p>
+<p>Apply (CPU):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="k">for</span><span class="w"> </span>m<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="si">${</span><span class="nv">V15</span><span class="p">//,/ </span><span class="si">}</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/mixture_v2.py<span class="w"> </span>apply<span class="w"> </span>--run<span class="w"> </span><span class="s2">"</span><span class="nv">$m</span><span class="s2">"</span><span class="w"> </span>--out<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">m</span><span class="si">}</span><span class="s2">_mx2"</span><span class="p">;</span><span class="w"> </span><span class="k">done</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="k">for</span><span class="w"> </span>m<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="si">${</span><span class="nv">FIN</span><span class="p">//,/ </span><span class="si">}</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="w">  </span><span class="k">for</span><span class="w"> </span>t<span class="w"> </span><span class="k">in</span><span class="w"> </span>fa0<span class="w"> </span>fa1<span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/mixture_v2.py<span class="w"> </span>apply<span class="w"> </span>--run<span class="w"> </span><span class="s2">"</span><span class="nv">$m</span><span class="s2">"</span><span class="w"> </span>--tag<span class="w"> </span><span class="s2">"</span><span class="nv">$t</span><span class="s2">"</span><span class="w"> </span>--out<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">m</span><span class="si">}</span><span class="s2">_mx2</span><span class="nv">$t</span><span class="s2">"</span><span class="p">;</span><span class="w"> </span><span class="k">done</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="w">  </span>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/avg_runs.py<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">m</span><span class="si">}</span><span class="s2">_mx2fa0"</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">m</span><span class="si">}</span><span class="s2">_mx2fa1"</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">m</span><span class="si">}</span><span class="s2">_mx2faA"</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="k">done</span>
+</code></pre></div>
+<h2 id="514-stacks-and-gate">5.14 Stacks and gate<a class="headerlink" href="#514-stacks-and-gate" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/stack_l2.py<span class="w"> </span><span class="k">$(for</span><span class="w"> </span>m<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="si">${</span><span class="nv">V15</span><span class="p">//,/ </span><span class="si">}</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">m</span><span class="si">}</span><span class="s2">_mx2"</span><span class="p">;</span><span class="w"> </span><span class="k">done)</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">  </span>--family<span class="w"> </span>cell<span class="w"> </span>--out<span class="w"> </span>stack_l2_cell_mx2_xp
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/stack_l2.py<span class="w"> </span><span class="k">$(for</span><span class="w"> </span>m<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="si">${</span><span class="nv">FIN</span><span class="p">//,/ </span><span class="si">}</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">m</span><span class="si">}</span><span class="s2">_mx2faA"</span><span class="p">;</span><span class="w"> </span><span class="k">done)</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="w">  </span>--family<span class="w"> </span>cell<span class="w"> </span>--out<span class="w"> </span>stack_l2_cell_ng4h2G
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/gate_runs.py<span class="w"> </span>stack_l2_cell_mx2_xp<span class="w"> </span>stack_l2_cell_ng4h2G<span class="w"> </span>stack_l2_cell_ng4h2G_lt1h
+</code></pre></div>
+<p><code>gate_runs.py</code> takes the second run on rows with C &lt; 3,600 s and the first elsewhere. It reads
+C from <code>outputs/mixture_v2/exp0227_r7c_realmlp_nomask_lane__v2.parquet</code> (written in §5.13).
+Member order changes only the log.</p>
+<h2 id="515-candidate-file-and-checks">5.15 Candidate file and checks<a class="headerlink" href="#515-candidate-file-and-checks" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>submissions/candidates
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/write_candidate.py<span class="w"> </span>stack_l2_cell_ng4h2G_lt1h<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="w">  </span>submissions/candidates/stack_l2_cell_ng4h2G_lt1h_candidate.parquet
+</code></pre></div>
+<p><code>write_candidate.py</code> joins the test predictions to the organizers' submission template, clips
+at 0, rounds to the template's integer type and validates: the two columns, the template's
+344,841 ids, no duplicates, no nulls, no non-finite or negative values.</p>
+<h2 id="516-what-reproduced-means">5.16 What "reproduced" means<a class="headerlink" href="#516-what-reproduced-means" title="Permanent link">&para;</a></h2>
+<ul>
+<li>GPU training is seeded but not bit-deterministic. A rebuild is not byte-identical to our
+  file.</li>
+<li>Measured on our runs: two mixture v2 fits of the same member with different seeds differ by
+  about 14 s rmsd on the test rows, even with fold averaging. A full rebuild differs from our
+  submission by an rmsd of that order, with a mean shift under 1 s.</li>
+<li>The gate structure does not change: rows with C ≥ 1 h come from the <code>stack_l2_cell_mx2_xp</code>
+  stack, rows with C &lt; 1 h from <code>stack_l2_cell_ng4h2G</code>.</li>
+<li>Out-of-fold scores of the C &lt; 1 h stack should fall within seed noise of ours: RMSE 230.21 s
+  on all 2025 rows, 196.98 s without the 15 day-rollover rows.</li>
+<li>The CPU steps (routing, lane heads, applies, averaging, stacks, gate, candidate) are
+  deterministic given their inputs: reruns of these steps on our inputs gave sha256-identical
+  outputs.</li>
+</ul>
+<h2 id="517-known-limits">5.17 Known limits<a class="headerlink" href="#517-known-limits" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>limit</th>
+<th>effect</th>
+<th>mitigation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Live external sources (OSM without a date clause, Open-Meteo revisions, X-Plane packs re-approved)</td>
+<td>features can differ slightly from ours</td>
+<td>each archive's <code>manifest.json</code> records the sha256 of every file for comparison</td>
+</tr>
+<tr>
+<td><code>delayed_flight_model.py</code> and the mixture frame read a block's newest cache file by modification time</td>
+<td>a stale cache file of a block can be read</td>
+<td>build into a clean <code>data/features/</code>; keep one cache file per block version</td>
+</tr>
+<tr>
+<td>a cell can finish with a NaN fold</td>
+<td>its rows are missing from the out-of-fold file</td>
+<td>check <code>status.json</code> before merging (§5.7)</td>
+</tr>
+<tr>
+<td>GPU non-determinism</td>
+<td>predictions differ at seed-noise level</td>
+<td>inherent (§5.16)</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../reference/package/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Package, CLI and scripts">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Package, CLI and scripts
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../data-sources/" class="md-footer__link md-footer__link--next" aria-label="Next: Data sources">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Data sources
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "content.code.copy", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

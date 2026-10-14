@@ -1,0 +1,1368 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Taxi-out time prediction at ten European airports: team humble-rocket's model, validation protocol and code.">
+      
+      
+      
+      
+        <link rel="prev" href="../03-validation/">
+      
+      
+        <link rel="next" href="../reproduction/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>The team stack - humble-rocket · PRC Data Challenge 2026</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#2-method" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="humble-rocket · PRC Data Challenge 2026" class="md-header__button md-logo" aria-label="humble-rocket · PRC Data Challenge 2026" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            humble-rocket · PRC Data Challenge 2026
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              The team stack
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="humble-rocket · PRC Data Challenge 2026" class="md-nav__button md-logo" aria-label="humble-rocket · PRC Data Challenge 2026" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    humble-rocket · PRC Data Challenge 2026
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../manuscript/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manuscript
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The model
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    The model
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-final-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The final submission
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-problem-and-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Problem and data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-validation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Validation protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The team stack
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The team stack
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#21-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#22-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Features
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#23-members-and-the-recording-pattern-head" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Members and the recording-pattern head
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#24-routing-on-ads-b-coverage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Routing on ADS-B coverage
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#25-lane-head-for-departures-without-a-flight-plan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 Lane head for departures without a flight plan
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#26-stamp-mixture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6 Stamp mixture
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#27-cell-stacker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.7 Cell stacker
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#28-gate-on-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.8 Gate on C
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Running the code
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Running the code
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reproduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reproducing the submission
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Member pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/final/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blend and assembly
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/package/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Package, CLI and scripts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-reproduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Team stack reproduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../data-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data sources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#21-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#22-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Features
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#23-members-and-the-recording-pattern-head" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Members and the recording-pattern head
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#24-routing-on-ads-b-coverage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Routing on ADS-B coverage
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#25-lane-head-for-departures-without-a-flight-plan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 Lane head for departures without a flight plan
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#26-stamp-mixture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6 Stamp mixture
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#27-cell-stacker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.7 Cell stacker
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#28-gate-on-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.8 Gate on C
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="2-method">2. Method<a class="headerlink" href="#2-method" title="Permanent link">&para;</a></h1>
+<h2 id="21-overview">2.1 Overview<a class="headerlink" href="#21-overview" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>challenge data + external archives
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>        │
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>        ▼
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>feature blocks (content-addressed cache)                      §2.2
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>        │
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>        ▼
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>members: CatBoost, RealMLP, GRU, set-attention, TabM          §2.3
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>  each with a recording-pattern head:  Σ p_k·C_k + (1 − Σ p_k)·ŷ
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>        │
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>        ├── routing: no-ADS-B expert on rows without a ground track   §2.4
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>        ▼
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>lane head on no-flight-plan rows                              §2.5
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>        ▼
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>stamp mixture (six recording classes, all departures)         §2.6
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>        ▼
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>cell stacker: non-negative member weights per cell            §2.7
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>        ▼
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>gate on C = MVT − SCHED: final stack below 1 h, earlier stack above   §2.8
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>        ▼
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>submission file
+</code></pre></div>
+<p>Every stage after the members is a post-processor. It reads a finished run's out-of-fold and test
+predictions and writes a new run in the same format, so every stage is scored with the same
+paired comparison (<a href="../03-validation/"><code>docs/03-validation.md</code></a>).</p>
+<h2 id="22-features">2.2 Features<a class="headerlink" href="#22-features" title="Permanent link">&para;</a></h2>
+<p>A feature block is a function of the full movement table (2025 and 2026, departures and arrivals)
+that returns one row per movement. No block reads the label or the off-block time of the row it
+describes. Labels enter only through fold-scoped target encodings. Blocks are cached under a hash
+of their source code, their input and any external archive they read.</p>
+<p>Blocks used by every final member:</p>
+<table>
+<thead>
+<tr>
+<th>Block</th>
+<th>Content</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>calendar_v2</code>, <code>cats</code></td>
+<td>time of day, weekday, month; airport, runway, stand, operator, aircraft type as categoricals</td>
+<td>challenge</td>
+</tr>
+<tr>
+<td><code>fpl_deltas</code>, <code>fpl_updates</code></td>
+<td>take-off minus each flight-plan time (EOBT, AOBT, …) and their pairwise differences</td>
+<td>challenge</td>
+</tr>
+<tr>
+<td><code>regime</code></td>
+<td>real NM off-block, derived constant, or no NM record; which derived constant</td>
+<td>challenge</td>
+</tr>
+<tr>
+<td><code>throughput</code>, <code>sched_demand</code>, <code>runway_gaps_v2</code></td>
+<td>rolling take-off and landing counts, scheduled demand, gaps between runway movements</td>
+<td>challenge</td>
+</tr>
+<tr>
+<td><code>surface_queue</code>, <code>discharge_v2</code>, <code>arrival_occupancy_v2</code></td>
+<td>aircraft on the surface at pushback, take-offs and landings during the taxi window, queue position, measured taxi of neighbouring departures</td>
+<td>challenge</td>
+</tr>
+<tr>
+<td><code>arrival_taxi_in</code></td>
+<td>rolling taxi-in statistics of recent arrivals</td>
+<td>challenge</td>
+</tr>
+<tr>
+<td><code>stand_bounds_v2</code></td>
+<td>time since the stand's previous departure and arrival: physical bounds on the off-block time</td>
+<td>challenge</td>
+</tr>
+<tr>
+<td><code>source_mismatch</code>, <code>identity_freq</code>, <code>feed_health</code></td>
+<td>disagreements between the airport and NM records, carrier and callsign identity, window share of rows without a flight plan</td>
+<td>challenge</td>
+</tr>
+<tr>
+<td><code>metar_visibility</code>, <code>winter_ops</code></td>
+<td>visibility, ceiling, low-visibility procedures, frozen precipitation, de-icing likelihood</td>
+<td>IEM METAR</td>
+</tr>
+<tr>
+<td><code>daylight_curfew</code></td>
+<td>solar elevation, local hour, minutes to and from night curfew</td>
+<td>computed</td>
+</tr>
+<tr>
+<td><code>adsb_ground</code></td>
+<td>from the open ADS-B track: time from first ground movement to take-off, path length, stop time, final hold, ground speed, coverage flags</td>
+<td>ADSB.lol</td>
+</tr>
+<tr>
+<td><code>adsb_ground_v2</code></td>
+<td>where the track starts relative to the stand, stand-to-threshold distance, pushback signature</td>
+<td>ADSB.lol</td>
+</tr>
+</tbody>
+</table>
+<p>Added by some members: <code>taxi_distance</code> (taxiway-graph distance from stand to threshold;
+OpenStreetMap), <code>stand_xplane</code> (stand size class, type and heading; X-Plane Scenery Gateway),
+<code>context_sets</code> (the index used by the sequence and set models to gather nearby movements).</p>
+<p>Five target encodings (airport × runway, × stand, × stand × runway, × operator, × aircraft type;
+mean, p10, p50, count) are fitted inside each fold, on clean labels only, with shrinkage.</p>
+<p>The ranking set is post-operational: every take-off time is known. Queue and window features
+therefore use other movements' take-off times on both sides of the row. They never use another
+departure's off-block time or label.</p>
+<h2 id="23-members-and-the-recording-pattern-head">2.3 Members and the recording-pattern head<a class="headerlink" href="#23-members-and-the-recording-pattern-head" title="Permanent link">&para;</a></h2>
+<p>Every member predicts on a square-root target and carries the same head. For each recording
+pattern <code>k</code> with a value <code>C_k</code> that is computable on a test row, a fold-scoped XGBoost classifier
+estimates <code>p_k</code>. The prediction is the conditional mean:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>ŷ = Σ_k p_k · C_k + (1 − Σ_k p_k) · ŷ_normal
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Pattern <code>k</code></th>
+<th>Training label (from the target, training rows only)</th>
+<th>Value <code>C_k</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>schedule default</td>
+<td><code>|BLOCK − SCHED| ≤ 10 s</code></td>
+<td><code>MVT − SCHED</code>, exactly the label</td>
+</tr>
+<tr>
+<td>day rollover</td>
+<td><code>|y − 86,400| &lt; 3,600 s</code></td>
+<td>86,400 s + ŷ_normal (15 positives; falls back to the base rate)</td>
+</tr>
+<tr>
+<td>early stamp</td>
+<td><code>y &gt; 1 h</code> with an NM record, not one of the above</td>
+<td>ŷ_normal + 1,495 s (fold-fitted mean offset)</td>
+</tr>
+</tbody>
+</table>
+<p>The normal regressor is trained on all rows with sample weight <code>1 − Σ p_k</code>, where <code>p</code> comes from
+heads nested inside the training fold.</p>
+<p>Final members:</p>
+<table>
+<thead>
+<tr>
+<th>Member</th>
+<th>Model</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>exp0250</code></td>
+<td>CatBoost (depth 10, lr 0.02, leaf ≥ 100)</td>
+<td>+ <code>taxi_distance</code>, <code>stand_xplane</code>; tail-prone blocks masked on no-flight-plan rows</td>
+</tr>
+<tr>
+<td><code>exp0235</code></td>
+<td>CatBoost</td>
+<td>+ the out-of-fold prediction of a GRU member (<code>exp0223</code>), built with three inner groups per fold</td>
+</tr>
+<tr>
+<td><code>exp0225</code></td>
+<td>RealMLP</td>
+<td>+ <code>taxi_distance</code></td>
+</tr>
+<tr>
+<td><code>exp0227</code> / <code>exp0268</code></td>
+<td>RealMLP</td>
+<td>no masking; <code>exp0268</code> uses hyper-parameters from a TPE search (§3.6)</td>
+</tr>
+<tr>
+<td><code>exp0232</code> / <code>exp0271</code></td>
+<td>GRU over the airport's movement sequence around the departure</td>
+<td><code>exp0271</code> tuned</td>
+</tr>
+<tr>
+<td><code>exp0233</code></td>
+<td>set-attention over nearby movements</td>
+<td></td>
+</tr>
+<tr>
+<td><code>exp0234</code></td>
+<td>TabM (BatchEnsemble MLP)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>The neural members are implemented in plain PyTorch in <code>src/prc/models/</code> (RealMLP after
+Holzmüller et al. 2024, TabM after Gorishniy et al. 2025). Each member is trained with three
+seeds; its test prediction comes from a fit on all twelve 2025 months.</p>
+<h2 id="24-routing-on-ads-b-coverage">2.4 Routing on ADS-B coverage<a class="headerlink" href="#24-routing-on-ads-b-coverage" title="Permanent link">&para;</a></h2>
+<p>Roughly 40 % of departures have no ADS-B ground track: all of LTFM, most of LFPG, and LIRF in July
+2026 (<a href="../01-problem-and-data/"><code>docs/01-problem-and-data.md</code></a> §1.4). A member trained with ADS-B features predicts these rows
+from a missing-value pattern it has seen rarely at some airports.</p>
+<p>For four members a twin is trained without the 21 ADS-B ground columns (<code>exp0259</code>, <code>exp0269</code>,
+<code>exp0262</code>, <code>exp0263</code>). <code>scripts/route_no_ground.py</code> takes the twin's prediction on rows without a
+ground track and the base member's elsewhere. The routing flag is label-free.</p>
+<h2 id="25-lane-head-for-departures-without-a-flight-plan">2.5 Lane head for departures without a flight plan<a class="headerlink" href="#25-lane-head-for-departures-without-a-flight-plan" title="Permanent link">&para;</a></h2>
+<p>On no-flight-plan rows every <code>_flt</code> column is null and the member's head loses its strongest
+inputs. <code>scripts/no_nm_lane_model.py</code> fits a two-branch estimator on these rows only:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>ŷ = p̂ · C + (1 − p̂) · ŷ_lane,        C = MVT − SCHED
+</code></pre></div>
+<p>with LightGBM for <code>p̂</code> and <code>ŷ_lane</code>, leave-one-month-out. The airports where it replaces the
+member are chosen inside each fold from the other months only.</p>
+<h2 id="26-stamp-mixture">2.6 Stamp mixture<a class="headerlink" href="#26-stamp-mixture" title="Permanent link">&para;</a></h2>
+<p><code>scripts/mixture_v2.py</code> models the recorded label of every departure as a mixture of six classes.
+The classes are training targets derived from the off-block stamp; they are never inputs.</p>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Definition</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>default</td>
+<td><code>|BLOCK − SCHED| ≤ 10 s</code></td>
+<td><code>C</code></td>
+</tr>
+<tr>
+<td>far</td>
+<td>off-block more than 1 h before schedule</td>
+<td><code>max(C, 0) + 3600·e^a</code></td>
+</tr>
+<tr>
+<td>near</td>
+<td><code>C &gt; 30 min</code> and <code>10 s &lt; |BLOCK − SCHED| ≤ 15 min</code></td>
+<td><code>C − 900·tanh(a)</code></td>
+</tr>
+<tr>
+<td>early</td>
+<td>NM record, label &gt; 1 h</td>
+<td><code>(MVT − AOBT_3) + Δ_E(x)</code></td>
+</tr>
+<tr>
+<td>block ≪ flight plan</td>
+<td>NM record, <code>AOBT_3 − BLOCK &gt; 40 min</code>, NM taxi in [0, 1 h]</td>
+<td><code>(MVT − AOBT_3) + Δ_B(x)</code></td>
+</tr>
+<tr>
+<td>normal</td>
+<td>the rest</td>
+<td><code>ŷ_member · e^a</code></td>
+</tr>
+</tbody>
+</table>
+<p>A PyTorch network outputs the class probabilities and bounded per-row value heads. The loss is the
+squared error of <code>Σ p_k v_k</code> on the raw scale plus a class log-loss. Classes that cannot occur on a
+row, by test-observable facts, are masked out of the softmax. Folds are nested leave-one-month-out;
+the test side is the mean of the thirteen fold models (<code>--test-foldavg</code>), averaged over two seeds.
+The result is blended with the member's prediction at a fold-selected weight.</p>
+<h2 id="27-cell-stacker">2.7 Cell stacker<a class="headerlink" href="#27-cell-stacker" title="Permanent link">&para;</a></h2>
+<p><code>scripts/stack_l2.py --family cell</code> combines the seven members with non-negative weights that sum
+to one, per cell of airport × flight-plan record present × C band (&lt; 30 min, 30-60 min, 1-2 h,</p>
+<blockquote>
+<p>2 h). Cell weights are shrunk toward their parent (flight-plan record × band, then global); the
+shrinkage strength is chosen by inner leave-one-month-out. Rollover rows are excluded from every
+fit. The test-side combiner is fitted on all twelve months.</p>
+</blockquote>
+<p>Global weights of the final stack:</p>
+<table>
+<thead>
+<tr>
+<th>Member (after lane head and mixture)</th>
+<th style="text-align: right;">Weight</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>routed GRU (<code>exp0271</code> / <code>exp0262</code>)</td>
+<td style="text-align: right;">0.445</td>
+</tr>
+<tr>
+<td>routed RealMLP (<code>exp0268</code> / <code>exp0269</code>)</td>
+<td style="text-align: right;">0.309</td>
+</tr>
+<tr>
+<td>routed set-attention (<code>exp0233</code> / <code>exp0263</code>)</td>
+<td style="text-align: right;">0.148</td>
+</tr>
+<tr>
+<td>routed CatBoost (<code>exp0250</code> / <code>exp0259</code>)</td>
+<td style="text-align: right;">0.098</td>
+</tr>
+<tr>
+<td>CatBoost + GRU stack (<code>exp0235</code>)</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr>
+<td>RealMLP + taxi distance (<code>exp0225</code>)</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr>
+<td>TabM (<code>exp0234</code>)</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+</tbody>
+</table>
+<p>Members with zero global weight still carry weight in some cells.</p>
+<h2 id="28-gate-on-c">2.8 Gate on C<a class="headerlink" href="#28-gate-on-c" title="Permanent link">&para;</a></h2>
+<p><code>scripts/gate_runs.py</code> takes the final stack on rows with <code>C &lt; 1 h</code> (87.5 % of test rows) and an
+earlier stack on the rest. The earlier stack has the same structure with the unrouted members
+(<code>exp0250</code>, <code>exp0235</code>, <code>exp0225</code>, <code>exp0227</code>, <code>exp0232</code>, <code>exp0233</code>, <code>exp0234</code>) and one mixture fit
+each.</p>
+<p>The reason: on 2025 validation, rows with <code>C ≥ 1 h</code> (rollovers excluded) score 398.0 with the
+earlier stack and 400.3-400.8 with the later ones. In 2026 those rows include a population with
+no 2025 counterpart: LIRF in July 2026, delayed, without ADS-B ground coverage. Changes that moved
+these rows could not be validated, so the final model leaves them on the earlier stack.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../03-validation/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Validation protocol">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Validation protocol
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../reproduction/" class="md-footer__link md-footer__link--next" aria-label="Next: Reproducing the submission">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Reproducing the submission
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "content.code.copy", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

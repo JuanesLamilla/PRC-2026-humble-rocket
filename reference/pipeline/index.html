@@ -1,0 +1,1395 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Taxi-out time prediction at ten European airports: team humble-rocket's model, validation protocol and code.">
+      
+      
+      
+      
+        <link rel="prev" href="../../reproduction/">
+      
+      
+        <link rel="next" href="../final/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Member pipeline - humble-rocket · PRC Data Challenge 2026</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#member-pipeline-pipeline" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="humble-rocket · PRC Data Challenge 2026" class="md-header__button md-logo" aria-label="humble-rocket · PRC Data Challenge 2026" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            humble-rocket · PRC Data Challenge 2026
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Member pipeline
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="humble-rocket · PRC Data Challenge 2026" class="md-nav__button md-logo" aria-label="humble-rocket · PRC Data Challenge 2026" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    humble-rocket · PRC Data Challenge 2026
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../manuscript/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manuscript
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The model
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    The model
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-final-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The final submission
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-problem-and-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Problem and data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-validation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Validation protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-method/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The team stack
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Running the code
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Running the code
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reproduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reproducing the submission
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Member pipeline
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Member pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#paths-and-environment-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paths and environment variables
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-fold-scheme" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The fold scheme
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stage-0-and-1-inputs-and-the-feature-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stage 0 and 1: inputs and the feature matrix
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stage-2-and-3-the-member-scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stage 2 and 3: the member scripts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Stage 2 and 3: the member scripts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#two-stage-gbm-gbm_nestedpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two-stage GBM: gbm_nested.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#distributional-ft-transformer-ftdistpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Distributional FT-transformer: ftdist.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#class-structured-combiner-class_mixpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Class-structured combiner: class_mix.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-trained-members" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The trained members
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-team-stack-expert-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The team-stack expert table
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reproduction-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reproduction notes
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../final/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blend and assembly
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../package/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Package, CLI and scripts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-reproduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Team stack reproduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data sources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#paths-and-environment-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paths and environment variables
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-fold-scheme" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The fold scheme
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stage-0-and-1-inputs-and-the-feature-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stage 0 and 1: inputs and the feature matrix
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stage-2-and-3-the-member-scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stage 2 and 3: the member scripts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Stage 2 and 3: the member scripts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#two-stage-gbm-gbm_nestedpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two-stage GBM: gbm_nested.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#distributional-ft-transformer-ftdistpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Distributional FT-transformer: ftdist.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#class-structured-combiner-class_mixpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Class-structured combiner: class_mix.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-trained-members" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The trained members
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-team-stack-expert-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The team-stack expert table
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reproduction-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reproduction notes
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="member-pipeline-pipeline">Member pipeline (<code>pipeline/</code>)<a class="headerlink" href="#member-pipeline-pipeline" title="Permanent link">&para;</a></h1>
+<p><code>pipeline/</code> holds the self-contained scripts that build the feature matrix and
+train every member behind the submitted file. Each script runs as a plain
+<code>python</code> call from the repository root; the GPU scripts also ran as Slurm array
+jobs with the generic templates in <code>pipeline/jobs/</code> (one H200, 8 CPUs;
+<code>jobs/py.sbatch &lt;script&gt; &lt;args&gt;</code> or an <code>--array=0-12</code> loop over the fold
+argument). <code>pipeline/RUNS.md</code> is the canonical record of every training run:
+the tag it wrote, and the flags that define it.</p>
+<h2 id="paths-and-environment-variables">Paths and environment variables<a class="headerlink" href="#paths-and-environment-variables" title="Permanent link">&para;</a></h2>
+<p>The scripts share <code>pipeline/common.py</code>, which resolves every path from the
+environment with these defaults:</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RAW_DIR</code></td>
+<td><code>data/raw</code></td>
+<td>challenge movement tables</td>
+</tr>
+<tr>
+<td><code>FEATURES_DIR</code></td>
+<td><code>data/external</code></td>
+<td>ADS-B ground-track feature files</td>
+</tr>
+<tr>
+<td><code>RANKING_FILE</code></td>
+<td><code>ranking.parquet</code></td>
+<td>the evaluation set joined as the test split</td>
+</tr>
+<tr>
+<td><code>RESULTS_DIR</code></td>
+<td><code>results</code></td>
+<td>text reports</td>
+</tr>
+</tbody>
+</table>
+<p>Member outputs land under <code>work/</code> (created on first use). <code>common.py</code> also
+carries the join-window constant <code>W = 3606</code> (the verified maximum of
+|BLOCK − LOBT| over every 2025 departure with an NM record) and the shared
+loaders for the movement tables.</p>
+<h2 id="the-fold-scheme">The fold scheme<a class="headerlink" href="#the-fold-scheme" title="Permanent link">&para;</a></h2>
+<p>Every member is trained thirteen times:</p>
+<ul>
+<li><strong>folds 1 to 12</strong>: that 2025 month is held out and the member writes its
+  out-of-fold prediction for it;</li>
+<li><strong>fold 0</strong>: the member fits on all twelve 2025 months and predicts the
+  evaluation rows named by <code>RANKING_FILE</code>.</li>
+</ul>
+<p>Each fold writes <code>work/&lt;tag&gt;/outer_NN.parquet</code>. The blend layer
+(<a href="../final/">final/</a>) consumes these files by tag.</p>
+<h2 id="stage-0-and-1-inputs-and-the-feature-matrix">Stage 0 and 1: inputs and the feature matrix<a class="headerlink" href="#stage-0-and-1-inputs-and-the-feature-matrix" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>python<span class="w"> </span>pipeline/prepare_data.py<span class="w">                     </span><span class="c1"># input check + ATFM day table</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>python<span class="w"> </span>pipeline/strike_feats.py<span class="w">                     </span><span class="c1"># strike calendar -&gt; work/strike_feats.parquet</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>python<span class="w"> </span>pipeline/fm_build.py<span class="w">                         </span><span class="c1"># raw-derived + ADS-B columns -&gt; work/fm.parquet</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nv">FM_IN</span><span class="o">=</span>work/fm.parquet<span class="w"> </span><span class="nv">FM_OUT</span><span class="o">=</span>work/fm2.parquet<span class="w"> </span>python<span class="w"> </span>pipeline/fm_v2.py<span class="w">   </span><span class="c1"># + ATFM columns</span>
+</code></pre></div>
+<ul>
+<li><strong><code>prepare_data.py</code></strong> verifies the challenge tables and ADS-B feature files
+  are in place (<code>data/README.md</code> lists where each one comes from) and converts
+  the EUROCONTROL ATFM workbook to <code>data/raw/apt_arr_atfm.parquet</code>.</li>
+<li><strong><code>strike_feats.py</code></strong> turns <code>assets/strike_calendar.csv</code> (hand-compiled from
+  public news sources) into per-departure strike and disruption features keyed
+  by <code>MVT_ID_mvt</code>.</li>
+<li><strong><code>fm_build.py</code></strong> builds the departure feature matrix: the raw-derived
+  blocks of <code>newfeat.py</code> (stand handover, arrival-default shares, NM-neighbour
+  taxi, NM plan residual, day no-NM share), the ADS-B ground-track columns,
+  and the LOBT-window and label-structure columns. The test split is whatever
+  <code>RANKING_FILE</code> names.</li>
+<li><strong><code>fm_v2.py</code></strong> appends the EUROCONTROL daily airport-arrival ATFM delay
+  features (airport × UTC date; open data; null means no regulation and maps
+  to 0).</li>
+</ul>
+<p>The <strong>retrain matrix</strong> for the final months is the same build against the full
+submission set:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nv">RANKING_FILE</span><span class="o">=</span>final_ranking.parquet<span class="w"> </span><span class="nv">FM_OUT</span><span class="o">=</span>work/fm_final.parquet<span class="w"> </span>python<span class="w"> </span>pipeline/fm_build.py
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nv">FM_IN</span><span class="o">=</span>work/fm_final.parquet<span class="w"> </span><span class="nv">FM_OUT</span><span class="o">=</span>work/fm2_final.parquet<span class="w"> </span>python<span class="w"> </span>pipeline/fm_v2.py
+</code></pre></div>
+<h2 id="stage-2-and-3-the-member-scripts">Stage 2 and 3: the member scripts<a class="headerlink" href="#stage-2-and-3-the-member-scripts" title="Permanent link">&para;</a></h2>
+<p>Three model families, all run per fold
+(<code>python pipeline/&lt;script&gt;.py $FOLD --tag &lt;tag&gt; [flags]</code>):</p>
+<h3 id="two-stage-gbm-gbm_nestedpy">Two-stage GBM: <code>gbm_nested.py</code><a class="headerlink" href="#two-stage-gbm-gbm_nestedpy" title="Permanent link">&para;</a></h3>
+<p>Nested two-stage GPU XGBoost on the full matrix. Stage 1 predicts properties
+of the off-block stamp, fitted with inner month-held folds over the training
+months so no stage-2 training row sees an in-fold stage-1 fit:</p>
+<table>
+<thead>
+<tr>
+<th>Stage-1 output</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>d_hat</code></td>
+<td>mean of d = BLOCK − LOBT (NM rows; bounded ±3606)</td>
+</tr>
+<tr>
+<td><code>dq10/50/90</code></td>
+<td>quantiles of d, giving predicted bounds on the label</td>
+</tr>
+<tr>
+<td><code>p_def</code></td>
+<td>P(|BLOCK − SCHED| ≤ 10 s), the schedule-default probability</td>
+</tr>
+<tr>
+<td><code>p_gt1h</code></td>
+<td>P(label &gt; 1 h and not a schedule default)</td>
+</tr>
+</tbody>
+</table>
+<p>Stage 2 fits the taxi time: <code>y_base</code> (no stage-1 features), <code>y_s1</code> (with
+them), and the mixture <code>y_mix = p_def · C + (1 − p_def) · normal-model</code>.
+Variants are selected with <code>--cfg</code> (and reuse a tagged stage-1 cache via
+<code>S1TAG</code>): a CatBoost mixture, the mixture fitted per airport, and a four-class
+stamp specialist that sees the other members' disagreement as features
+(<code>work/members_oof.parquet</code> / <code>members_test.parquet</code>, written by <code>gbm_eval.py</code>
+with <code>SAVE_MEMBERS=1</code>).</p>
+<h3 id="distributional-ft-transformer-ftdistpy">Distributional FT-transformer: <code>ftdist.py</code><a class="headerlink" href="#distributional-ft-transformer-ftdistpy" title="Permanent link">&para;</a></h3>
+<p>A feature-token transformer (after Gorishniy et al. 2021) whose head is one
+softmax over taxi-time bins <strong>masked to the NM join window</strong>, plus a point
+mass at y = C masked where a schedule default is impossible. Targets are
+Gaussian-smoothed histograms (HL-Gauss); the prediction is the distribution
+mean, the squared-error optimum. The loss is cross-entropy plus a small MSE
+term on the mean. Rollover rows are left out of training, as for every member.
+Variants come from flags: <code>--s1 v2</code> adds the nested stage-1 outputs as extra
+tokens, <code>--strikes</code> adds the strike-calendar flags, <code>--drop eobt1,arvt1,=me</code>
+removes every feature anchored on the filed EOBT (the EOBT-free variant),
+<code>--w-nonm 10</code> upweights the no-flight-plan rows.</p>
+<h3 id="class-structured-combiner-class_mixpy">Class-structured combiner: <code>class_mix.py</code><a class="headerlink" href="#class-structured-combiner-class_mixpy" title="Permanent link">&para;</a></h3>
+<p>The strongest single member combines member <em>components</em> instead of final
+predictions:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>ŷ = p_def·C + p_near·(C − offset) + p_long·v_long + p_normal·Σ_j g_j·n_j
+</code></pre></div>
+<p>One MLP outputs the class probabilities (the default class masked where
+infeasible), the gate g over the members' conditional normal means n_j, and
+small bounded corrections, from every member's class signals: the
+transformer's p_def, the GBM stage-1 p_def and p_gt1h, the anomaly
+specialist's class probabilities and long-stamp value, the bounded offset
+model, the <a href="../../02-method/">team stack's</a> prediction, and context features.
+The loss is MSE plus a class log-loss on the observed recording class.
+<code>--lane nonm</code> trains a second instance on the no-flight-plan rows only.</p>
+<h2 id="the-trained-members">The trained members<a class="headerlink" href="#the-trained-members" title="Permanent link">&para;</a></h2>
+<p>From <code>pipeline/RUNS.md</code> (the primary runs; <code>FM=work/fm2.parquet</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Tag</th>
+<th>Script and flags</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gbm_v2</code></td>
+<td><code>gbm_nested.py $FOLD --tag v2</code></td>
+<td>two-stage XGBoost: nested stage-1 stamp models, then <code>y_base</code>/<code>y_s1</code>/<code>y_mix</code></td>
+</tr>
+<tr>
+<td><code>gbm_v3a</code></td>
+<td><code>S1TAG=v2 gbm_nested.py $FOLD --tag v3a --only-cat --cfg cat_d10s1,catmix</code></td>
+<td>CatBoost mixture (<code>y_catmix</code>) + plain deep CatBoost</td>
+</tr>
+<tr>
+<td><code>gbm_vap3</code></td>
+<td><code>S1TAG=v2 gbm_nested.py $FOLD --tag vap3 --only-cat --cfg catmixapy_s201</code></td>
+<td>the mixture fitted per airport</td>
+</tr>
+<tr>
+<td><code>gbm_anom1</code></td>
+<td><code>S1TAG=v2 gbm_nested.py $FOLD --tag anom1 --only-cat --cfg anom_s1</code></td>
+<td>four-class stamp specialist over member deviations</td>
+</tr>
+<tr>
+<td><code>ft_ftB7</code></td>
+<td><code>ftdist.py $FOLD --tag ftB7 --seeds 0..6</code></td>
+<td>distributional transformer, 7 seeds</td>
+</tr>
+<tr>
+<td><code>ft_ftC7</code></td>
+<td><code>ftdist.py $FOLD --tag ftC7 --seeds 0..6 --s1 v2</code></td>
+<td>with stage-1 outputs as extra tokens</td>
+</tr>
+<tr>
+<td><code>ft_ftSC</code></td>
+<td><code>ftdist.py $FOLD --tag ftSC --seeds 0,1,2 --strikes work/strike_feats.parquet</code></td>
+<td>strike-calendar tokens</td>
+</tr>
+<tr>
+<td><code>ft_ftNE</code></td>
+<td><code>ftdist.py $FOLD --tag ftNE --seeds 1..18 --drop eobt1,arvt1,=me</code></td>
+<td>EOBT-free variant</td>
+</tr>
+<tr>
+<td><code>ft_ftNE4</code></td>
+<td>first four seeds of <code>ft_ftNE</code>, merged</td>
+<td>4-seed average for the long-delay lane</td>
+</tr>
+<tr>
+<td><code>ft_ftN10</code></td>
+<td><code>ftdist.py $FOLD --tag ftN10 --seeds 0..9 --w-nonm 10</code></td>
+<td>no-flight-plan rows upweighted</td>
+</tr>
+<tr>
+<td><code>cm_cmA</code></td>
+<td><code>class_mix.py --tag cmA --more --plus --seeds 0..16</code></td>
+<td>class-structured combiner, 17 seeds</td>
+</tr>
+<tr>
+<td><code>cm_cmNA</code></td>
+<td><code>class_mix.py --tag cmNA --lane nonm --seeds 0..44</code></td>
+<td>the no-flight-plan instance, 45 seeds</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Fold-0 retrains</strong> for the final months (<code>gbm_v2F</code>, <code>gbm_v3aF</code>, <code>gbm_vap3F</code>,
+<code>ft_ftCF</code>, <code>ft_ftNEFF</code>, <code>ft_ftB7F</code>, <code>ft_ftSCF</code>, <code>ft_ftN10F</code>) use the same
+flags against the retrain matrix, fold 0 only, transformers with 4 seeds. No
+retrain exists for the class and anomaly models; the
+<a href="../../06-final-model/">final-model page</a> explains why they are excluded on the
+retrain months.</p>
+<p><strong>Auxiliary tags</strong> consumed by <code>cm_cmA</code> as inputs (not blend members):
+<code>ft_ftB3</code> (3-seed base transformer), <code>tr_trE</code> (<code>tabr.py</code>, a retrieval-augmented
+network in the TabR style), <code>nn_nn2</code> (<code>nn_mix.py</code>, a window-bounded neural
+mixture), <code>gbm_hf10</code> (<code>gbm_nested.py --cfg catmixd_json</code> with trial 10 of
+<code>hpo_trials.json</code>), and <code>team_t9004</code> (the team member
+<code>experiments/exp9004_setenc_overnight_extra.yaml</code>, converted by
+<code>team_adapt.py</code>).</p>
+<h2 id="the-team-stack-expert-table">The team-stack expert table<a class="headerlink" href="#the-team-stack-expert-table" title="Permanent link">&para;</a></h2>
+<p>The class-structured combiner reads the team stack's prediction as one of its
+experts. Five CPU scripts turn the gated team-stack run
+(<code>outputs/runs/stack_l2_cell_ng4h2G_lt1h</code>, the end of the
+<a href="../../05-reproduction/">team stack reproduction</a>) into the table and tag the
+combiner consumes; the ordered commands are in
+<a href="../../reproduction/#5-the-team-stack-expert-table">reproducing the submission</a>
+and in <code>pipeline/RUNS.md</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Script</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>make_twins.py</code></td>
+<td>the label-free arrival-twin table (<code>work/twins.parquet</code>)</td>
+</tr>
+<tr>
+<td><code>team_base.py</code></td>
+<td>label-free projections of the gated stack: window clip, in-window model, rollover identity, twin cap, a LIRF offset (<code>work/v22_{oof,test}.parquet</code>)</td>
+</tr>
+<tr>
+<td><code>team_corrector.py</code></td>
+<td>a month-held residual corrector with stand-handover and arrival-stamp features the members do not see directly (<code>work/a14_*.parquet</code>)</td>
+</tr>
+<tr>
+<td><code>team_dmodel.py</code></td>
+<td>a month-held model of the bounded off-block offset d = BLOCK − LOBT on NM rows (<code>work/a17_{oof,test}.parquet</code>)</td>
+</tr>
+<tr>
+<td><code>team_table.py</code></td>
+<td>the expert table: the base plus each corrector that passes its pre-set month-held rule (<code>work/v23_{oof,test}.parquet</code>)</td>
+</tr>
+<tr>
+<td><code>team_adapt.py</code></td>
+<td>converts a team run directory into a member tag (<code>work/team_&lt;short&gt;/outer_NN.parquet</code>)</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>gbm_eval.py TAG [extra_tags...]</code></strong> scores nested member outputs against the
+expert table and stacks them with it, per lane, month-held; with
+<code>SAVE_MEMBERS=1</code> it writes the member-deviation tables the anomaly specialist
+reads.</p>
+<h2 id="reproduction-notes">Reproduction notes<a class="headerlink" href="#reproduction-notes" title="Permanent link">&para;</a></h2>
+<p>The table above reconstructs each run's flags from the scripts' defaults and
+our run records; the full <code>argv</code> of every historical run was not retained, and
+retraining a GPU member reproduces its predictions only up to hardware
+nondeterminism. The blend and assembly layer (<a href="../final/">final/</a>) is exactly
+deterministic given the member files: re-running it reproduces the submitted
+parquet byte for byte.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../../reproduction/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Reproducing the submission">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Reproducing the submission
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../final/" class="md-footer__link md-footer__link--next" aria-label="Next: Blend and assembly">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Blend and assembly
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "content.code.copy", "search.suggest"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
