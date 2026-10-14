@@ -25,6 +25,10 @@ leaderboard. The code is licensed GPL-3.0-or-later, as the challenge requires.
 
 ## The model in one paragraph
 
+<figure markdown>
+  <img src="assets/pipeline.svg" alt="The pipeline: data sources feed the feature matrix and the team stack; three member families feed a per-lane blend, then corrections and label-free rules produce the final file" width="880">
+</figure>
+
 A feature matrix built from the challenge movement tables, ADS-B ground tracks
 (ADSB.lol) and the EUROCONTROL daily ATFM table feeds a set of members built
 around an explicit model of the off-block *stamp*: two-stage GBMs that predict
@@ -40,6 +44,15 @@ finish the file. Months are predicted by the member generation whose
 training-time and test-time inputs are consistent; the
 [final-model page](06-final-model.md) explains why that distinction is worth
 several seconds of RMSE.
+
+<figure markdown>
+  <img src="assets/taxiout.gif" alt="Animated chart of a morning of Zurich departures: each bar grows from off-block to take-off as time advances; most are minutes long, a few carry schedule-copied stamps or no flight-plan record" width="880">
+  <figcaption>What the label looks like: a morning at Zurich (3 July 2025,
+  drawn from the movement table alone; <code>scripts/animate_taxiout.py</code>
+  rebuilds it). Each bar runs from off-block to take-off. The orange bars carry
+  an off-block stamp copied from the schedule and the grey bars have no
+  flight-plan record: the recording classes the members model separately.</figcaption>
+</figure>
 
 ## Reading guide
 

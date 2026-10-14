@@ -1,11 +1,24 @@
 # Taxi-out time prediction: PRC Data Challenge 2026
 
+<p align="center">
+  <a href="https://juaneslamilla.github.io/PRC-2026-humble-rocket/"><img alt="documentation" src="https://img.shields.io/badge/documentation-site-4a5a9c"></a>
+  <a href="https://juaneslamilla.github.io/PRC-2026-humble-rocket/manuscript/"><img alt="manuscript" src="https://img.shields.io/badge/manuscript-draft%20PDF-4a5a9c"></a>
+  <a href="LICENSE"><img alt="license: GPL-3.0" src="https://img.shields.io/badge/license-GPL--3.0-3e6b3e"></a>
+</p>
+
+<p align="center">
+  <a href="https://juaneslamilla.github.io/PRC-2026-humble-rocket/"><b>Read the documentation</b></a> ·
+  <a href="https://juaneslamilla.github.io/PRC-2026-humble-rocket/manuscript/"><b>Read the manuscript</b></a> ·
+  <a href="https://prc-data-challenge-2026.netlify.app/">The challenge</a>
+</p>
+
 > **Manuscript (draft, not yet submitted, not peer reviewed).** Lamilla Cuellar, J. E.,
 > Urbiztondo, M., Parbhakar, A., and Ancheta, C. *Recording-Aware Ensembles for Taxi-Out
 > Time Estimation at Ten European Airports.* Draft prepared for the Journal of Open Aviation
-> Science: [`manuscript/main.pdf`](manuscript/main.pdf) (LaTeX source in [`manuscript/`](manuscript/)).
-> The authors contributed equally. The draft may change before submission and has not been
-> reviewed, so please do not cite it as a published result.
+> Science: [read it on the site](https://juaneslamilla.github.io/PRC-2026-humble-rocket/manuscript/)
+> (LaTeX source in [`manuscript/`](manuscript/)). The authors contributed equally. The draft
+> may change before submission and has not been reviewed, so please do not cite it as a
+> published result.
 
 Team **humble-rocket**'s solution to the [PRC Data Challenge 2026](https://prc-data-challenge-2026.netlify.app/):
 predict the taxi-out time of 670,790 departures at ten European airports in
@@ -24,6 +37,8 @@ Licensed GPL-3.0 (`LICENSE`).
 
 ## The model
 
+<p align="center"><img src="docs/assets/pipeline.svg" alt="The pipeline: data sources feed the feature matrix and the team stack; three member families feed a per-lane blend, then corrections and label-free rules produce the final file" width="880"></p>
+
 A feature matrix built from the challenge movement tables, ADS-B ground tracks
 (ADSB.lol) and the EUROCONTROL daily ATFM table feeds a set of members built
 around an explicit model of the off-block *stamp*: two-stage GBMs that predict
@@ -41,6 +56,14 @@ that distinction is worth several seconds of RMSE.
 
 Full description and evidence: [`docs/06-final-model.md`](docs/06-final-model.md).
 
+<p align="center"><img src="docs/assets/taxiout.gif" alt="Animated chart of a morning of Zurich departures: each bar grows from off-block to take-off as time advances; most are minutes long, a few carry schedule-copied stamps or no flight-plan record" width="880"></p>
+
+What the label looks like: a morning at Zurich (3 July 2025, drawn from the
+movement table alone; `scripts/animate_taxiout.py` rebuilds it). Each bar runs
+from off-block to take-off, the taxi-out time the challenge scores. The orange
+bars carry an off-block stamp copied from the schedule and the grey bars have
+no flight-plan record: the recording classes the members model separately.
+
 ## Repository layout
 
 | Path | Content |
@@ -50,7 +73,7 @@ Full description and evidence: [`docs/06-final-model.md`](docs/06-final-model.md
 | `final/` | `blend.py` (month-held per-lane simplex), `assemble.py` (corrections + label-free rules + submission writer), `verify.py` |
 | `jobs/slurm/`, `pipeline/jobs/` | Slurm templates the runs used |
 | `assets/` | the hand-compiled strike/disruption calendar (public news sources) |
-| `docs/` | the write-up as an MkDocs site (`mkdocs.yml`): problem and data, method, validation protocol, reproduction, the final submission, code reference, data sources. Build it locally with `uv run --group docs mkdocs serve` |
+| `docs/` | the write-up, published at [juaneslamilla.github.io/PRC-2026-humble-rocket](https://juaneslamilla.github.io/PRC-2026-humble-rocket/): problem and data, method, validation protocol, reproduction, the final submission, code reference, data sources. Build it locally with `uv run --group docs mkdocs serve` |
 | `manuscript/` | the manuscript (LaTeX source, figures, provenance of every quoted number) |
 | `data/` | inputs; `data/README.md` says where every file comes from (only that file is committed) |
 
